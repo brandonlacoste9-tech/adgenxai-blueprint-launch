@@ -123,15 +123,15 @@ const Chatbot = () => {
         <Button
           onClick={() => setIsOpen(true)}
           size="lg"
-          className="fixed bottom-6 right-6 rounded-full h-14 w-14 shadow-lg"
+          className="fixed bottom-6 right-6 rounded-full h-14 w-14 shadow-[0_8px_32px_0_rgba(31,38,135,0.3)] hover:shadow-[0_8px_32px_0_rgba(31,38,135,0.5)] backdrop-blur-xl border border-white/20"
         >
           <MessageCircle className="h-6 w-6" />
         </Button>
       )}
 
       {isOpen && (
-        <Card className="fixed bottom-6 right-6 w-96 h-[32rem] flex flex-col shadow-2xl">
-          <div className="flex items-center justify-between p-4 border-b">
+        <Card className="fixed bottom-6 right-6 w-96 h-[32rem] flex flex-col shadow-[0_8px_32px_0_rgba(31,38,135,0.3)] bg-background/40 backdrop-blur-2xl border-white/20">
+          <div className="flex items-center justify-between p-4 border-b border-white/10 bg-white/5 backdrop-blur-xl">
             <h3 className="font-semibold">AI Assistant</h3>
             <Button
               variant="ghost"
@@ -142,7 +142,7 @@ const Chatbot = () => {
             </Button>
           </div>
 
-          <ScrollArea className="flex-1 p-4" ref={scrollRef}>
+          <ScrollArea className="flex-1 p-4 bg-background/20" ref={scrollRef}>
             <div className="space-y-4">
               {messages.length === 0 && (
                 <div className="text-center text-muted-foreground text-sm py-8">
@@ -157,10 +157,10 @@ const Chatbot = () => {
                   }`}
                 >
                   <div
-                    className={`rounded-lg px-4 py-2 max-w-[80%] ${
+                    className={`rounded-lg px-4 py-2 max-w-[80%] backdrop-blur-xl border ${
                       message.role === "user"
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-muted"
+                        ? "bg-primary/20 text-foreground border-primary/30"
+                        : "bg-white/10 text-foreground border-white/20"
                     }`}
                   >
                     <p className="text-sm whitespace-pre-wrap">{message.content}</p>
@@ -169,7 +169,7 @@ const Chatbot = () => {
               ))}
               {isLoading && messages[messages.length - 1]?.role === "user" && (
                 <div className="flex justify-start">
-                  <div className="bg-muted rounded-lg px-4 py-2">
+                  <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-lg px-4 py-2">
                     <Loader2 className="h-4 w-4 animate-spin" />
                   </div>
                 </div>
@@ -177,13 +177,14 @@ const Chatbot = () => {
             </div>
           </ScrollArea>
 
-          <form onSubmit={handleSubmit} className="p-4 border-t">
+          <form onSubmit={handleSubmit} className="p-4 border-t border-white/10 bg-white/5 backdrop-blur-xl">
             <div className="flex gap-2">
               <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 placeholder="Type your message..."
                 disabled={isLoading}
+                className="bg-white/10 backdrop-blur-sm border-white/20 text-foreground placeholder:text-muted-foreground"
               />
               <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
                 <Send className="h-4 w-4" />

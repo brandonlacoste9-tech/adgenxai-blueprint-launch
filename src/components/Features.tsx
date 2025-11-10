@@ -36,7 +36,7 @@ const features = [
 
 const Features = () => {
   return (
-    <section className="py-24 bg-gradient-to-b from-background to-secondary/20">
+    <section className="py-24 relative">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-4xl sm:text-5xl font-bold mb-4">
@@ -53,10 +53,10 @@ const Features = () => {
             return (
               <Card 
                 key={index} 
-                className="group hover:shadow-lg transition-all duration-300 hover:-translate-y-1 border-border/50 bg-card/50 backdrop-blur-sm"
+                className="group hover:shadow-[0_8px_32px_0_rgba(31,38,135,0.2)] transition-all duration-300 hover:-translate-y-1 border-white/20 bg-white/5 backdrop-blur-xl"
               >
                 <CardContent className="pt-8 pb-6 px-6">
-                  <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors">
+                  <div className="w-14 h-14 rounded-2xl bg-primary/10 backdrop-blur-sm flex items-center justify-center mb-6 group-hover:bg-primary/20 transition-colors border border-white/10">
                     <Icon className="w-7 h-7 text-primary" />
                   </div>
                   <h3 className="text-xl font-semibold mb-3 text-foreground">

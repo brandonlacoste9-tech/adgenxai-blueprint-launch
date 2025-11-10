@@ -3,9 +3,9 @@ import { ArrowRight } from "lucide-react";
 
 const CTA = () => {
   return (
-    <section className="py-24 bg-gradient-to-b from-background to-secondary/30">
+    <section className="py-24 relative">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-4xl mx-auto text-center bg-white/5 backdrop-blur-xl border border-white/20 rounded-3xl p-12 shadow-[0_8px_32px_0_rgba(31,38,135,0.2)]">
           <h2 className="text-4xl sm:text-5xl font-bold mb-6">
             Ready to Transform Your Advertising?
           </h2>

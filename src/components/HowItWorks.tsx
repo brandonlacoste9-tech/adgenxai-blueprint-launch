@@ -23,7 +23,7 @@ const steps = [
 
 const HowItWorks = () => {
   return (
-    <section className="py-24 bg-background">
+    <section className="py-24 relative">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-4xl sm:text-5xl font-bold mb-4">
@@ -45,12 +45,12 @@ const HowItWorks = () => {
                 <div key={index} className="relative">
                   <div className="text-center">
                     {/* Step number */}
-                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 border-2 border-primary/30 mb-6 relative z-10 bg-background">
+                    <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-primary/10 backdrop-blur-sm border-2 border-primary/30 mb-6 relative z-10 shadow-[0_8px_32px_0_rgba(31,38,135,0.15)]">
                       <span className="text-2xl font-bold text-primary">{step.number}</span>
                     </div>
 
                     {/* Icon */}
-                    <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+                    <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-primary/20 to-accent/20 backdrop-blur-sm flex items-center justify-center border border-white/10 shadow-[0_8px_32px_0_rgba(31,38,135,0.1)]">
                       <Icon className="w-10 h-10 text-primary" />
                     </div>
 

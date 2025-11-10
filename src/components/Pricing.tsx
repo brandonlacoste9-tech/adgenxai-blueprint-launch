@@ -56,7 +56,7 @@ const plans = [
 
 const Pricing = () => {
   return (
-    <section className="py-24 bg-gradient-to-b from-secondary/20 to-background">
+    <section className="py-24 relative">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-4xl sm:text-5xl font-bold mb-4">
@@ -71,10 +71,10 @@ const Pricing = () => {
           {plans.map((plan, index) => (
             <Card 
               key={index} 
-              className={`relative flex flex-col ${
+              className={`relative flex flex-col backdrop-blur-xl ${
                 plan.popular 
-                  ? 'border-primary shadow-xl scale-105 bg-card' 
-                  : 'border-border/50 bg-card/50'
+                  ? 'border-primary/50 shadow-[0_8px_32px_0_rgba(31,38,135,0.25)] scale-105 bg-white/10' 
+                  : 'border-white/20 bg-white/5'
               }`}
             >
               {plan.popular && (
