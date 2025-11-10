@@ -31,6 +31,10 @@ All colors MUST be HSL.
 
     --accent: 221 83% 53%;
     --accent-foreground: 0 0% 100%;
+    
+    --teal: 170 100% 62%;
+    --cyan: 190 100% 70%;
+    --pink: 300 100% 82%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
@@ -80,6 +84,10 @@ All colors MUST be HSL.
 
     --accent: 221 83% 53%;
     --accent-foreground: 0 0% 100%;
+    
+    --teal: 170 100% 62%;
+    --cyan: 190 100% 70%;
+    --pink: 300 100% 82%;
 
     --destructive: 0 63% 31%;
     --destructive-foreground: 210 40% 98%;
@@ -137,5 +145,50 @@ All colors MUST be HSL.
   .dark .glass-card {
     background: rgba(255, 255, 255, 0.03);
     border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Aurora Animation */
+  @keyframes aurora-drift {
+    0%, 100% { 
+      transform: translate3d(0, 0, 0) scale(1);
+    }
+    50% { 
+      transform: translate3d(10vw, 10vh, 0) scale(1.1);
+    }
+  }
+  
+  .aurora-blob {
+    position: absolute;
+    border-radius: 50%;
+    opacity: 0.6;
+    filter: blur(100px);
+    mix-blend-mode: screen;
+    animation: aurora-drift 30s infinite alternate;
+  }
+  
+  .aurora-blob-1 {
+    background: rgba(137, 255, 230, 0.6);
+    width: 60vw;
+    height: 60vw;
+    top: -20vh;
+    left: -20vw;
+  }
+  
+  .aurora-blob-2 {
+    background: rgba(100, 208, 255, 0.5);
+    width: 80vw;
+    height: 80vw;
+    bottom: -30vh;
+    right: -30vw;
+    animation-duration: 35s;
+  }
+  
+  .aurora-blob-3 {
+    background: rgba(254, 192, 255, 0.4);
+    width: 70vw;
+    height: 70vw;
+    top: 10vh;
+    right: -40vw;
+    animation-duration: 40s;
   }
 }
