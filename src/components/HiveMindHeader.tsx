@@ -12,25 +12,31 @@ const HiveMindHeader = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <NavLink to="/hivemind" className="text-xl font-bold text-foreground tracking-wider">
-            Northern Ventures
+            Kolony
           </NavLink>
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center space-x-6">
             <a 
-              href="#bees" 
+              href="/hivemind#bees" 
               className="text-foreground/80 hover:text-foreground font-semibold transition-colors"
             >
               Bees
             </a>
+            <NavLink 
+              to="/creator" 
+              className="text-foreground/80 hover:text-foreground font-semibold transition-colors"
+            >
+              Creator Studio
+            </NavLink>
             <a 
-              href="#pricing" 
+              href="/hivemind#pricing" 
               className="text-foreground/80 hover:text-foreground font-semibold transition-colors"
             >
               Pricing
             </a>
             <a 
-              href="#contact" 
+              href="/hivemind#contact" 
               className="text-foreground/80 hover:text-foreground font-semibold transition-colors"
             >
               Contact
@@ -52,21 +58,28 @@ const HiveMindHeader = () => {
         {mobileMenuOpen && (
           <nav className="md:hidden py-4 space-y-3">
             <a 
-              href="#bees" 
+              href="/hivemind#bees" 
               className="block text-foreground/80 hover:text-foreground font-semibold transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               Bees
             </a>
+            <NavLink 
+              to="/creator" 
+              className="block text-foreground/80 hover:text-foreground font-semibold transition-colors"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Creator Studio
+            </NavLink>
             <a 
-              href="#pricing" 
+              href="/hivemind#pricing" 
               className="block text-foreground/80 hover:text-foreground font-semibold transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >
               Pricing
             </a>
             <a 
-              href="#contact" 
+              href="/hivemind#contact" 
               className="block text-foreground/80 hover:text-foreground font-semibold transition-colors"
               onClick={() => setMobileMenuOpen(false)}
             >

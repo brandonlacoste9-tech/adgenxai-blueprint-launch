@@ -2,3 +2,12 @@ project_id = "aodmlnprcsptohpvrmrk"
 
 [functions.chat]
 verify_jwt = false
+
+[functions.generate-longcat]
+verify_jwt = false
+
+[functions.generate-emu]
+verify_jwt = false
+
+[functions.export-social]
+verify_jwt = false
