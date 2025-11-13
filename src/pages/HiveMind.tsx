@@ -83,11 +83,11 @@ const HiveMind = () => {
         <section className="relative py-32 px-4 text-center">
           <div className="container mx-auto max-w-4xl">
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-[#67e5a1] via-[#8beeff] to-[#ffcaff] bg-clip-text text-transparent">
-              HiveMind AI
+              Kolony HiveMind AI
             </h1>
             <p className="text-xl text-foreground/80 mb-8 max-w-3xl mx-auto leading-relaxed">
-              Deploy an army of specialized AI Bees to build, analyse, and grow your business. 
-              Full‑stack automation for marketing, operations, finance and more — powered by Northern Ventures.
+              Deploy an army of specialized AI Bees to build, analyze, and grow your business. 
+              Full‑stack automation for marketing, operations, finance and more — powered by the hive.
             </p>
             <Button 
               size="lg"
@@ -142,9 +142,9 @@ const HiveMind = () => {
 
       {/* Footer */}
       <footer id="contact" className="text-center py-8 px-4 text-foreground/60 text-sm bg-background/50 backdrop-blur-xl border-t border-white/10">
-        <p className="mb-2">© 2025 Northern Ventures. All rights reserved. Made with ❤️ in the North.</p>
+        <p className="mb-2">© 2025 Kolony. All rights reserved. Made with 🐝 by the hive.</p>
         <p>
-          Contact: <a href="mailto:hello@northern-ventures.ca" className="text-cyan hover:text-teal transition-colors">hello@northern-ventures.ca</a>
+          Contact: <a href="mailto:hello@kolony.ai" className="text-cyan hover:text-teal transition-colors">hello@kolony.ai</a>
         </p>
       </footer>
     </div>
