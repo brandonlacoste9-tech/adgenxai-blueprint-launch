@@ -12,15 +12,21 @@ const Index = () => {
   return (
     <main className="min-h-screen">
       {/* Navigation Bar */}
-      <nav className="sticky top-0 z-50 backdrop-blur-xl bg-background/40 border-b border-white/10">
+      <nav className="sticky top-0 z-50 backdrop-blur-xl bg-[#000a18]/90 border-b border-white/10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
-          <span className="text-xl font-bold">AdGenXAI</span>
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2">
+            <span className="text-2xl">🐝</span>
+            <span className="text-xl font-bold">Kolony</span>
+          </div>
+          <div className="flex items-center gap-6">
+            <a href="#" className="text-sm text-foreground/70 hover:text-foreground transition-colors">Pricing</a>
+            <a href="#" className="text-sm text-foreground/70 hover:text-foreground transition-colors">Compare</a>
+            <a href="#" className="text-sm text-foreground/70 hover:text-foreground transition-colors">Sign In</a>
             <a 
-              href="/hivemind" 
-              className="text-sm font-semibold text-foreground/80 hover:text-foreground transition-colors"
+              href="/creator" 
+              className="text-sm font-semibold px-4 py-2 bg-primary hover:bg-primary-dark rounded-lg text-primary-foreground transition-colors"
             >
-              HiveMind AI →
+              Start Free
             </a>
           </div>
         </div>

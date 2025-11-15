@@ -44,6 +44,8 @@ export default {
         teal: "hsl(var(--teal))",
         cyan: "hsl(var(--cyan))",
         pink: "hsl(var(--pink))",
+        orange: "hsl(var(--orange))",
+        amber: "hsl(var(--amber))",
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",
