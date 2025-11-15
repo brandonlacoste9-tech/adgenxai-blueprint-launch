@@ -17,11 +17,11 @@ All colors MUST be HSL.
     --popover: 0 0% 100% / 0.7;
     --popover-foreground: 221 39% 11%;
 
-    --primary: 221 100% 50%;
+    --primary: 38 100% 55%;
     --primary-foreground: 0 0% 100%;
     
-    --primary-light: 221 100% 60%;
-    --primary-dark: 221 100% 40%;
+    --primary-light: 38 100% 65%;
+    --primary-dark: 38 100% 45%;
 
     --secondary: 214 32% 91% / 0.3;
     --secondary-foreground: 221 39% 11%;
@@ -29,8 +29,11 @@ All colors MUST be HSL.
     --muted: 210 40% 96% / 0.5;
     --muted-foreground: 215 16% 47%;
 
-    --accent: 221 83% 53%;
+    --accent: 38 100% 55%;
     --accent-foreground: 0 0% 100%;
+    
+    --orange: 38 100% 55%;
+    --amber: 43 96% 56%;
     
     --teal: 170 100% 62%;
     --cyan: 190 100% 70%;
@@ -70,11 +73,11 @@ All colors MUST be HSL.
     --popover: 222 47% 15% / 0.7;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 221 100% 50%;
+    --primary: 38 100% 55%;
     --primary-foreground: 0 0% 100%;
     
-    --primary-light: 221 100% 60%;
-    --primary-dark: 221 100% 40%;
+    --primary-light: 38 100% 65%;
+    --primary-dark: 38 100% 45%;
 
     --secondary: 217 33% 17% / 0.3;
     --secondary-foreground: 210 40% 98%;
@@ -82,8 +85,11 @@ All colors MUST be HSL.
     --muted: 217 33% 17% / 0.5;
     --muted-foreground: 215 20% 65%;
 
-    --accent: 221 83% 53%;
+    --accent: 38 100% 55%;
     --accent-foreground: 0 0% 100%;
+    
+    --orange: 38 100% 55%;
+    --amber: 43 96% 56%;
     
     --teal: 170 100% 62%;
     --cyan: 190 100% 70%;
@@ -117,7 +123,7 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
-    background-image: var(--gradient-mesh);
+    background: #000a18;
     background-attachment: fixed;
   }
   
@@ -191,4 +197,23 @@ All colors MUST be HSL.
     right: -40vw;
     animation-duration: 40s;
   }
+}
+
+/* Hexagonal honeycomb pattern */
+.hexagon-bg {
+  background-image: 
+    repeating-linear-gradient(0deg, transparent, transparent 86px, rgba(255, 255, 255, 0.03) 86px, rgba(255, 255, 255, 0.03) 87px),
+    repeating-linear-gradient(60deg, transparent, transparent 86px, rgba(255, 255, 255, 0.03) 86px, rgba(255, 255, 255, 0.03) 87px),
+    repeating-linear-gradient(120deg, transparent, transparent 86px, rgba(255, 255, 255, 0.03) 86px, rgba(255, 255, 255, 0.03) 87px);
+  background-size: 100px 174px;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px) translateX(0px); }
+  33% { transform: translateY(-20px) translateX(10px); }
+  66% { transform: translateY(-10px) translateX(-10px); }
+}
+
+.bee-float {
+  animation: float 8s ease-in-out infinite;
 }
