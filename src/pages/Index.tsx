@@ -12,7 +12,7 @@ const Index = () => {
   return (
     <main className="min-h-screen">
       {/* Navigation Bar */}
-      <nav className="sticky top-0 z-50 backdrop-blur-xl bg-[#000a18]/90 border-b border-white/10">
+      <nav className="sticky top-0 z-50 backdrop-blur-xl bg-[#001a33]/95 border-b border-white/10">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="text-2xl">🐝</span>
