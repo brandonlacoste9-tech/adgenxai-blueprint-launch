@@ -1,0 +1,49 @@
+replicaCount: 3
+
+image:
+  repository: colonyos/colony
+  pullPolicy: IfNotPresent
+  tag: latest
+
+service:
+  type: LoadBalancer
+  port: 80
+  grpcPort: 50051
+
+ingress:
+  enabled: true
+  className: nginx
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-prod
+  hosts:
+    - host: colony.example.com
+      paths:
+        - path: /
+          pathType: Prefix
+  tls:
+    - secretName: colony-tls
+      hosts:
+        - colony.example.com
+
+autoscaling:
+  enabled: true
+  minReplicas: 3
+  maxReplicas: 10
+  targetCPUUtilizationPercentage: 70
+  targetMemoryUtilizationPercentage: 80
+
+resources:
+  limits:
+    cpu: 2000m
+    memory: 2Gi
+  requests:
+    cpu: 500m
+    memory: 512Mi
+
+workers:
+  enabled: true
+  replicas: 5
+  types:
+    - code_generator
+    - data_analyst
+    - tester

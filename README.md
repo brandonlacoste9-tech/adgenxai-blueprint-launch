@@ -71,3 +71,9 @@ Yes, you can!
 To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
 
 Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+
+## Colony OS system summary
+
+Need the fast, business-mode overview of BeeHive, FoundryAI, AdGenAI, and the Codex governance stack? Read the [Colony OS — System Summary (Codex Briefing Mode)](docs/colony-os-master-summary.md) for the end-to-end briefing.
+
+Preparing Claude (or any design agent) to render the OrbitalProp Neurosphere? Use the [Neurosphere Visualization Briefing](docs/neurosphere-visual-briefing.md) for the validated prompt packet.
