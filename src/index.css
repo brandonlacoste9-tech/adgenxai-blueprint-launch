@@ -202,9 +202,9 @@ All colors MUST be HSL.
 /* Hexagonal honeycomb pattern */
 .hexagon-bg {
   background-image: 
-    repeating-linear-gradient(0deg, transparent, transparent 86px, rgba(255, 255, 255, 0.03) 86px, rgba(255, 255, 255, 0.03) 87px),
-    repeating-linear-gradient(60deg, transparent, transparent 86px, rgba(255, 255, 255, 0.03) 86px, rgba(255, 255, 255, 0.03) 87px),
-    repeating-linear-gradient(120deg, transparent, transparent 86px, rgba(255, 255, 255, 0.03) 86px, rgba(255, 255, 255, 0.03) 87px);
+    repeating-linear-gradient(0deg, transparent, transparent 86px, rgba(255, 255, 255, 0.08) 86px, rgba(255, 255, 255, 0.08) 87px),
+    repeating-linear-gradient(60deg, transparent, transparent 86px, rgba(255, 255, 255, 0.08) 86px, rgba(255, 255, 255, 0.08) 87px),
+    repeating-linear-gradient(120deg, transparent, transparent 86px, rgba(255, 255, 255, 0.08) 86px, rgba(255, 255, 255, 0.08) 87px);
   background-size: 100px 174px;
 }
 
