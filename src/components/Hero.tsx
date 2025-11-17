@@ -4,15 +4,15 @@ import { BRAND_IDENTITY } from "@/lib/constants";
 
 const Hero = () => {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-[#001a33]">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-[#000a18] via-[#001a33] to-[#000f26]">
       {/* Hexagonal honeycomb background */}
-      <div className="absolute inset-0 hexagon-bg opacity-70"></div>
+      <div className="absolute inset-0 hexagon-bg opacity-50"></div>
       
       {/* Animated glow effects */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-1/4 -left-10 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[120px] animate-pulse"></div>
-        <div className="absolute bottom-1/4 -right-10 w-[500px] h-[500px] bg-amber/20 rounded-full blur-[120px] animate-pulse" style={{ animationDelay: '1s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/10 rounded-full blur-[150px]"></div>
+        <div className="absolute top-1/4 -left-10 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[150px] animate-pulse"></div>
+        <div className="absolute bottom-1/4 -right-10 w-[500px] h-[500px] bg-amber/15 rounded-full blur-[130px] animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-primary/10 rounded-full blur-[180px]"></div>
       </div>
 
       {/* Floating bees */}
@@ -36,7 +36,7 @@ const Hero = () => {
           </div>
 
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-4 py-2 mb-8 rounded-lg border border-primary/30 bg-primary/5 backdrop-blur-sm">
+          <div className="inline-flex items-center gap-2 px-5 py-2.5 mb-8 rounded-full glass-card shadow-lg shadow-primary/20">
             <Sparkles className="w-4 h-4 text-primary" />
             <span className="text-sm font-medium text-foreground">Enterprise-Grade AI Infrastructure</span>
           </div>
@@ -58,7 +58,7 @@ const Hero = () => {
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
             <Button 
               size="lg" 
-              className="text-base px-8 py-6 bg-gradient-to-r from-primary to-amber hover:from-primary-dark hover:to-primary transition-all duration-300 transform hover:scale-105 shadow-[0_0_30px_rgba(255,153,0,0.3)] group"
+              className="text-base px-8 py-6 bg-gradient-to-r from-primary to-amber hover:from-primary-dark hover:to-primary transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-primary/40 hover:shadow-primary/60 group rounded-xl"
             >
               Request Demo
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -66,26 +66,26 @@ const Hero = () => {
             <Button 
               size="lg" 
               variant="outline" 
-              className="text-base px-8 py-6 border-2 border-foreground/20 bg-background/10 backdrop-blur-sm hover:bg-foreground/5 transition-all duration-300"
+              className="text-base px-8 py-6 glass-card hover:glass-strong transition-all duration-300 transform hover:scale-105 rounded-xl border-none"
             >
               ▶ View Architecture
             </Button>
           </div>
 
           {/* Metrics */}
-          <div className="grid grid-cols-3 gap-8 max-w-3xl mx-auto pt-8 border-t border-border/30">
-            <div className="text-center">
+          <div className="grid grid-cols-3 gap-6 max-w-3xl mx-auto pt-8">
+            <div className="p-6 rounded-xl glass-card hover:glass-strong transition-all group">
               <div className="text-3xl sm:text-4xl font-bold mb-1">
-                <span className="text-[#10b981]">P95</span> <span className="text-foreground">&lt;400ms</span>
+                <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent group-hover:scale-110 transition-transform inline-block">P95</span> <span className="text-foreground group-hover:scale-110 transition-transform inline-block">&lt;400ms</span>
               </div>
               <div className="text-sm text-muted-foreground">Response Time</div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl sm:text-4xl font-bold text-foreground mb-1">99.9%</div>
+            <div className="p-6 rounded-xl glass-card hover:glass-strong transition-all group">
+              <div className="text-3xl sm:text-4xl font-bold text-foreground mb-1 group-hover:scale-110 transition-transform">99.9%</div>
               <div className="text-sm text-muted-foreground">Uptime SLO</div>
             </div>
-            <div className="text-center">
-              <div className="text-3xl sm:text-4xl font-bold text-foreground mb-1">&lt;1%</div>
+            <div className="p-6 rounded-xl glass-card hover:glass-strong transition-all group">
+              <div className="text-3xl sm:text-4xl font-bold text-foreground mb-1 group-hover:scale-110 transition-transform">&lt;1%</div>
               <div className="text-sm text-muted-foreground">Error Rate</div>
             </div>
           </div>
