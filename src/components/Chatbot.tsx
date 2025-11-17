@@ -20,9 +20,14 @@ const Chatbot = () => {
   const { toast } = useToast();
 
   useEffect(() => {
-    if (scrollViewportRef.current) {
-      scrollViewportRef.current.scrollTop = scrollViewportRef.current.scrollHeight;
-    }
+    const viewport = scrollViewportRef.current;
+    if (!viewport) return;
+
+    const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    viewport.scrollTo({
+      top: viewport.scrollHeight,
+      behavior: prefersReducedMotion ? "auto" : "smooth",
+    });
   }, [messages]);
 
   const streamChat = async (userMessage: string) => {
