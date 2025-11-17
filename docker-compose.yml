@@ -1,0 +1,47 @@
+version: '3.8'
+
+services:
+  colony-api:
+    build: .
+    container_name: colony-api
+    ports:
+      - "8000:8000"
+      - "50051:50051"
+    environment:
+      - COLONY_ENV=production
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - ./data:/app/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    container_name: colony-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:15-alpine
+    container_name: colony-postgres
+    environment:
+      - POSTGRES_DB=colony
+      - POSTGRES_USER=colony
+      - POSTGRES_PASSWORD=colony
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  dashboard:
+    build: .
+    container_name: colony-dashboard
+    command: streamlit run colonyos/monitoring/dashboard.py
+    ports:
+      - "8501:8501"
+    environment:
+      - COLONY_API_URL=http://colony-api:8000
+    depends_on:
+      - colony-api
+    restart: unless-stopped

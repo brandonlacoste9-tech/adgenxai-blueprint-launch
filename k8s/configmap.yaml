@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: colony-config
+  namespace: colonyos
+data:
+  config.yaml: |
+    system:
+      log_level: INFO
+      max_concurrent_tasks: 100
+    mind:
+      routing_algorithm: capability_match
+    guardian:
+      consensus_threshold: 0.66
+      drift_threshold: 0.3
+    body:
+      worker_heartbeat_timeout: 60
+      task_timeout_default: 300
+    storage:
+      memory_backend: sqlite

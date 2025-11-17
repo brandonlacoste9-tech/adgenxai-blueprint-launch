@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: colony-worker
+  namespace: colonyos
+spec:
+  replicas: 5
+  selector:
+    matchLabels:
+      app: colony-worker
+  template:
+    metadata:
+      labels:
+        app: colony-worker
+    spec:
+      containers:
+        - name: worker
+          image: colonyos/worker:latest
+          env:
+            - name: COLONY_API_URL
+              value: http://colony-api
+            - name: WORKER_TYPE
+              value: code_generator
+          resources:
+            requests:
+              cpu: "250m"
+              memory: "256Mi"
+            limits:
+              cpu: "1000m"
+              memory: "1Gi"

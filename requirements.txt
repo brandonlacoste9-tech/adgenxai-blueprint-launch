@@ -1,0 +1,9 @@
+fastapi
+uvicorn[standard]
+click
+requests
+rich
+streamlit
+pandas
+plotly
+pytest

@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: colony-api
+  namespace: colonyos
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: colony-api
+  template:
+    metadata:
+      labels:
+        app: colony-api
+    spec:
+      containers:
+        - name: api
+          image: colonyos/colony:latest
+          ports:
+            - containerPort: 8000
+              name: http
+            - containerPort: 50051
+              name: grpc
+          env:
+            - name: COLONY_CONFIG
+              value: /config/config.yaml
+          volumeMounts:
+            - name: config
+              mountPath: /config
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+      volumes:
+        - name: config
+          configMap:
+            name: colony-config

@@ -1,0 +1,6 @@
+apiVersion: v2
+name: colonyos
+description: Multi-Agent AI Operating System
+type: application
+version: 0.1.0
+appVersion: "0.1.0"
