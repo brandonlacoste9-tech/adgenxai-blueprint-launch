@@ -1,7 +1,6 @@
 import HiveMindHeader from "@/components/HiveMindHeader";
 import AuroraBackground from "@/components/AuroraBackground";
 import CreatorStudio from "@/components/CreatorStudio";
-import Footer from "@/components/Footer";
 
 const Creator = () => {
   return (
