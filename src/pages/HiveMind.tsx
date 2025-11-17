@@ -3,6 +3,7 @@ import AuroraBackground from "@/components/AuroraBackground";
 import BeeCard from "@/components/BeeCard";
 import PricingCard from "@/components/PricingCard";
 import { Button } from "@/components/ui/button";
+import { BRAND_IDENTITY } from "@/lib/constants";
 import { FileText, Globe, FlaskConical, Scale, DollarSign, Share2 } from "lucide-react";
 
 const bees = [
@@ -83,7 +84,7 @@ const HiveMind = () => {
         <section className="relative py-32 px-4 text-center">
           <div className="container mx-auto max-w-4xl">
             <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-[#67e5a1] via-[#8beeff] to-[#ffcaff] bg-clip-text text-transparent">
-              Kolony HiveMind AI
+              {BRAND_IDENTITY.name} HiveMind AI
             </h1>
             <p className="text-xl text-foreground/80 mb-8 max-w-3xl mx-auto leading-relaxed">
               Deploy an army of specialized AI Bees to build, analyze, and grow your business. 
@@ -142,9 +143,11 @@ const HiveMind = () => {
 
       {/* Footer */}
       <footer id="contact" className="text-center py-8 px-4 text-foreground/60 text-sm bg-background/50 backdrop-blur-xl border-t border-white/10">
-        <p className="mb-2">© 2025 Kolony. All rights reserved. Made with 🐝 by the hive.</p>
+        <p className="mb-2">
+          © {new Date().getFullYear()} {BRAND_IDENTITY.name}. All rights reserved. Made with {BRAND_IDENTITY.emoji} by the hive.
+        </p>
         <p>
-          Contact: <a href="mailto:hello@kolony.ai" className="text-cyan hover:text-teal transition-colors">hello@kolony.ai</a>
+          Contact: <a href={BRAND_IDENTITY.contactHref} className="text-cyan hover:text-teal transition-colors">{BRAND_IDENTITY.contactEmail}</a>
         </p>
       </footer>
     </div>

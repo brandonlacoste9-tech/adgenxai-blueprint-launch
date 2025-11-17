@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Sparkles } from "lucide-react";
+import { BRAND_IDENTITY } from "@/lib/constants";
 
 const Hero = () => {
   return (
@@ -42,9 +43,9 @@ const Hero = () => {
 
           {/* Main Headline */}
           <h1 className="text-5xl sm:text-6xl lg:text-7xl font-bold mb-6 leading-tight">
-            <span className="text-foreground">Autonomous Ad Swarm</span>
+            <span className="text-foreground">{BRAND_IDENTITY.tagline.primary}</span>
             <br />
-            <span className="text-primary">with Full Observability</span>
+            <span className="text-primary">{BRAND_IDENTITY.tagline.secondary}</span>
           </h1>
 
           {/* Subheadline */}

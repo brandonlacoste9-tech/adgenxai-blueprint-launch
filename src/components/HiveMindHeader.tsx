@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/NavLink";
+import { BRAND_IDENTITY } from "@/lib/constants";
 
 const HiveMindHeader = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -12,7 +13,7 @@ const HiveMindHeader = () => {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <NavLink to="/hivemind" className="text-xl font-bold text-foreground tracking-wider">
-            Kolony
+            {BRAND_IDENTITY.name}
           </NavLink>
 
           {/* Desktop Navigation */}
