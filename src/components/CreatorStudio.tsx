@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { useToast } from "@/hooks/use-toast";
 import { supabase } from "@/integrations/supabase/client";
 import { Loader2, Copy, Instagram, Youtube, MessageCircle } from "lucide-react";
+import { BRAND_IDENTITY } from "@/lib/constants";
 
 const CreatorStudio = () => {
   const [prompt, setPrompt] = useState("");
@@ -109,10 +110,10 @@ const CreatorStudio = () => {
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       <div className="text-center mb-12">
         <h1 className="text-4xl sm:text-5xl font-bold mb-4 bg-gradient-to-r from-teal via-cyan to-pink bg-clip-text text-transparent">
-          Kolony Creator Studio
+          {BRAND_IDENTITY.name} Creator Studio
         </h1>
         <p className="text-foreground/80 text-lg">
-          AI-powered content creation for every platform 🐝
+          AI-powered content creation for every platform {BRAND_IDENTITY.emoji}
         </p>
       </div>
 

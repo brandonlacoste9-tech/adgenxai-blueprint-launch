@@ -1,4 +1,5 @@
 import { Facebook, Twitter, Linkedin, Instagram } from "lucide-react";
+import { BRAND_IDENTITY } from "@/lib/constants";
 
 const Footer = () => {
   return (
@@ -7,10 +8,11 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-12">
           {/* Brand */}
           <div className="col-span-1">
-            <h3 className="text-2xl font-bold mb-4">AdGenXAI</h3>
-            <p className="text-background/80 mb-6">
-              AI-powered advertising platform for modern marketers.
-            </p>
+            <h3 className="text-2xl font-bold mb-4 flex items-center gap-2">
+              <span>{BRAND_IDENTITY.emoji}</span>
+              <span>{BRAND_IDENTITY.name}</span>
+            </h3>
+            <p className="text-background/80 mb-6">{BRAND_IDENTITY.shortDescription}</p>
             <div className="flex gap-4">
               <a href="#" className="w-10 h-10 rounded-full bg-white/10 backdrop-blur-sm hover:bg-white/20 flex items-center justify-center transition-colors border border-white/20">
                 <Facebook className="w-5 h-5" />
@@ -64,7 +66,10 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-background/10 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-background/80 text-sm">
-            © 2024 AdGenXAI. All rights reserved.
+            © {new Date().getFullYear()} {BRAND_IDENTITY.name}. All rights reserved.
+          </p>
+          <p className="text-background/80 text-sm">
+            Contact: <a href={BRAND_IDENTITY.contactHref} className="underline hover:text-background">{BRAND_IDENTITY.contactEmail}</a>
           </p>
           <div className="flex gap-6 text-sm">
             <a href="#" className="text-background/80 hover:text-background transition-colors">Privacy Policy</a>
