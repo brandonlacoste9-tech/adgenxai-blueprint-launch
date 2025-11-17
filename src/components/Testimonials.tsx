@@ -1,12 +1,13 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Star } from "lucide-react";
+import { BRAND_IDENTITY } from "@/lib/constants";
 
 const testimonials = [
   {
     name: "Sarah Johnson",
     role: "Marketing Director",
     company: "TechCorp Inc.",
-    content: "AdGenXAI transformed our advertising workflow. We've seen a 300% increase in campaign performance and cut our creative production time by 80%.",
+    content: `${BRAND_IDENTITY.name} transformed our advertising workflow. We've seen a 300% increase in campaign performance and cut our creative production time by 80%.`,
     rating: 5,
   },
   {
@@ -20,7 +21,7 @@ const testimonials = [
     name: "Emily Rodriguez",
     role: "Agency Owner",
     company: "Creative Minds Agency",
-    content: "Managing multiple client campaigns has never been easier. AdGenXAI helps us deliver exceptional results while scaling our operations efficiently.",
+    content: `Managing multiple client campaigns has never been easier. ${BRAND_IDENTITY.name} helps us deliver exceptional results while scaling our operations efficiently.`,
     rating: 5,
   },
 ];
@@ -34,7 +35,7 @@ const Testimonials = () => {
             Loved by Marketers Worldwide
           </h2>
           <p className="text-xl text-muted-foreground">
-            See what our customers have to say about AdGenXAI
+            See what our customers have to say about {BRAND_IDENTITY.name}
           </p>
         </div>
 
