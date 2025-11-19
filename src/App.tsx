@@ -7,6 +7,8 @@ import Index from "./pages/Index";
 import HiveMind from "./pages/HiveMind";
 import Creator from "./pages/Creator";
 import NotFound from "./pages/NotFound";
+import { Home } from "./pages/Home";
+import "./styles/colony-design-system.css";
 
 const queryClient = new QueryClient();
 
@@ -17,7 +19,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/home" element={<Index />} />
           <Route path="/hivemind" element={<HiveMind />} />
           <Route path="/creator" element={<Creator />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
