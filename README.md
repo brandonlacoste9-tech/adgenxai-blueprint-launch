@@ -74,6 +74,23 @@ Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/c
 
 ## Colony OS system summary
 
-Need the fast, business-mode overview of BeeHive, FoundryAI, AdGenAI, and the Codex governance stack? Read the [Colony OS — System Summary (Codex Briefing Mode)](docs/colony-os-master-summary.md) for the end-to-end briefing.
+Need the fast, business-mode overview of BeeHive, FoundryAI, AdGenAI, and the Codex governance stack? Read the [Colony OS - System Summary (Codex Briefing Mode)](docs/colony-os-master-summary.md) for the end-to-end briefing.
 
 Preparing Claude (or any design agent) to render the OrbitalProp Neurosphere? Use the [Neurosphere Visualization Briefing](docs/neurosphere-visual-briefing.md) for the validated prompt packet.
+
+## Deployment checklist (AdGenXAI)
+
+1) Set env vars on your host (Vercel/Lovable):
+   - `VITE_SUPABASE_URL` = https://<your-project>.supabase.co
+   - `VITE_SUPABASE_PROJECT_ID` = <your-project-id>
+   - `VITE_SUPABASE_PUBLISHABLE_KEY` = <your-anon-key>
+2) `npm install`
+3) `npm run lint` (should be clean)
+4) `npm run build` (verified locally)
+5) Publish/share in Lovable or push to trigger CI.
+
+## Notes
+
+- `.env` is not tracked; use `.env.example` as a template.
+- Tailwind config uses ESM import for `tailwindcss-animate`.
+- Lint-only Fast Refresh warnings were resolved.
