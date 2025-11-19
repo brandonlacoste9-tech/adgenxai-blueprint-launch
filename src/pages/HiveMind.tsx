@@ -5,6 +5,8 @@ import PricingCard from "@/components/PricingCard";
 import { Button } from "@/components/ui/button";
 import { BRAND_IDENTITY } from "@/lib/constants";
 import { FileText, Globe, FlaskConical, Scale, DollarSign, Share2 } from "lucide-react";
+import ActiveBeesPanel from "@/components/ActiveBeesPanel";
+import TelemetryDashboard from "@/components/TelemetryDashboard";
 
 const bees = [
   {
@@ -80,6 +82,18 @@ const HiveMind = () => {
       <HiveMindHeader />
       
       <main>
+        {/* Dashboard Section */}
+        <section className="py-16 px-4 bg-background/10 backdrop-blur-sm">
+          <div className="container mx-auto max-w-7xl space-y-8">
+            <div className="text-center mb-8">
+              <h2 className="text-3xl sm:text-4xl font-bold mb-2">Hive Mind Dashboard</h2>
+              <p className="text-foreground/70">Real-time bee colony monitoring and event tracking</p>
+            </div>
+            <ActiveBeesPanel />
+            <TelemetryDashboard />
+          </div>
+        </section>
+
         {/* Hero Section */}
         <section className="relative py-32 px-4 text-center">
           <div className="container mx-auto max-w-4xl">
