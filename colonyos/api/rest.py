@@ -17,7 +17,7 @@ from pydantic import BaseModel, Field
 from colonyos.core.types import Identity
 from colonyos.core.types import Task as ColonyTask
 from colonyos.core.types import TaskStatus, WorkerCapability
-from colonyos.api.routes import bees, telemetry
+from colonyos.api.routes import bees, telemetry, routing, guardian
 
 logger = logging.getLogger(__name__)
 
@@ -131,6 +131,8 @@ class ColonyAPI:
         # Include external routers
         self.app.include_router(bees.router)
         self.app.include_router(telemetry.router)
+        self.app.include_router(routing.router)
+        self.app.include_router(guardian.router)
         self.active_connections: List[WebSocket] = []
         self._setup_routes()
 

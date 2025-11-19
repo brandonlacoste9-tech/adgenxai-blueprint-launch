@@ -5,9 +5,14 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 from collections import deque
+import logging
 
 from fastapi import APIRouter, status
 from pydantic import BaseModel, Field
+
+from colonyos.api.services.realtime import realtime_service
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/v1/telemetry", tags=["telemetry"])
 
@@ -36,7 +41,7 @@ class TelemetryListResponse(BaseModel):
 
 @router.post("", status_code=status.HTTP_201_CREATED)
 async def create_telemetry_event(request: TelemetryEventRequest) -> Dict[str, Any]:
-    """Record a telemetry event from a bee."""
+    """Record a telemetry event from a bee and broadcast via realtime."""
     now = datetime.now(timezone.utc).isoformat()
     event_data = {
         "bee_id": request.bee_id,
@@ -45,6 +50,19 @@ async def create_telemetry_event(request: TelemetryEventRequest) -> Dict[str, An
         "timestamp": request.timestamp or now,
     }
     _telemetry_events.append(event_data)
+
+    # Broadcast event via realtime service
+    try:
+        await realtime_service.publish_event(
+            channel=f"telemetry:{request.bee_id}",
+            data=event_data
+        )
+        await realtime_service.publish_event(
+            channel="telemetry:hive",
+            data=event_data
+        )
+    except Exception as e:
+        logger.warning(f"Failed to broadcast telemetry: {e}")
 
     return {"success": True, "message": f"Telemetry event '{request.event}' recorded"}
 

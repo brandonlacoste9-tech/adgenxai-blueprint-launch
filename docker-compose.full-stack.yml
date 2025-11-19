@@ -1,0 +1,193 @@
+version: '3.8'
+
+services:
+  # ==================== Frontend ====================
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "5173:5173"
+    environment:
+      - VITE_API_URL=http://localhost:8000
+      - VITE_CENTRIFUGO_URL=ws://localhost:8000
+    depends_on:
+      - colony-backend
+    networks:
+      - colony-network
+    command: npm run dev
+
+  # ==================== Colony Backend ====================
+  colony-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - LOG_LEVEL=INFO
+    depends_on:
+      - qdrant
+      - centrifugo
+      - temporal
+    volumes:
+      - ./colonyos:/app/colonyos
+      - ./src:/app/src
+    networks:
+      - colony-network
+    command: python -m colonyos.main
+
+  # ==================== Vector Database (Qdrant) ====================
+  qdrant:
+    image: qdrant/qdrant:latest
+    ports:
+      - "6333:6333"
+    environment:
+      - QDRANT_API_KEY=default_key
+    volumes:
+      - qdrant-storage:/qdrant/storage
+    networks:
+      - colony-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:6333/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  # ==================== Real-time Streaming (Centrifugo) ====================
+  centrifugo:
+    image: centrifugo/centrifugo:latest
+    ports:
+      - "8001:8000"
+    environment:
+      - CENTRIFUGO_TOKEN_HMAC_SECRET_KEY=default_secret_key
+      - CENTRIFUGO_API_KEY=default_api_key
+      - CENTRIFUGO_ALLOWED_ORIGINS=http://localhost:5173,http://localhost:8000
+    command: >
+      centrifugo
+      --config=/dev/null
+      --client_insecure
+      --address=0.0.0.0:8000
+    networks:
+      - colony-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/info"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  # ==================== Workflow Orchestration (Temporal) ====================
+  temporal:
+    image: temporalio/auto-setup:latest
+    ports:
+      - "7233:7233"
+    environment:
+      - DB=postgres12
+      - DB_PORT=5432
+      - POSTGRES_USER=temporal
+      - POSTGRES_PASSWORD=temporal
+      - POSTGRES_DB=temporal
+    depends_on:
+      - postgres
+    networks:
+      - colony-network
+    healthcheck:
+      test: ["CMD", "tctl", "admin", "cluster", "describe"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+
+  # ==================== Temporal Web UI ====================
+  temporal-web:
+    image: temporalio/web:latest
+    ports:
+      - "8080:8080"
+    environment:
+      - TEMPORAL_ADDRESS=temporal:7233
+    depends_on:
+      - temporal
+    networks:
+      - colony-network
+
+  # ==================== Temporal Worker ====================
+  temporal-worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TEMPORAL_ADDRESS=temporal:7233
+    depends_on:
+      - temporal
+      - colony-backend
+      - qdrant
+    volumes:
+      - ./colonyos:/app/colonyos
+    networks:
+      - colony-network
+    command: python -m colonyos.workflows.worker
+    restart: unless-stopped
+
+  # ==================== Database (PostgreSQL) ====================
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_USER=temporal
+      - POSTGRES_PASSWORD=temporal
+      - POSTGRES_DB=temporal
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-storage:/var/lib/postgresql/data
+    networks:
+      - colony-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U temporal"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+
+  # ==================== Redis (Optional Cache) ====================
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-storage:/data
+    networks:
+      - colony-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 3
+
+  # ==================== Monitoring Dashboard ====================
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8501:8501"
+    environment:
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      - colony-backend
+    networks:
+      - colony-network
+    command: streamlit run colonyos/monitoring/dashboard.py --server.port=8501 --server.address=0.0.0.0
+
+# ==================== Volumes ====================
+volumes:
+  qdrant-storage:
+    driver: local
+  postgres-storage:
+    driver: local
+  redis-storage:
+    driver: local
+
+# ==================== Networks ====================
+networks:
+  colony-network:
+    driver: bridge

@@ -5,9 +5,14 @@ from __future__ import annotations
 from datetime import datetime, timezone
 from typing import Any, Dict, List, Optional
 from uuid import uuid4
+import logging
 
 from fastapi import APIRouter, HTTPException, status
 from pydantic import BaseModel, Field
+
+from colonyos.mind.semantic_router import semantic_router
+
+logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/v1/bees", tags=["bees"])
 
@@ -66,6 +71,15 @@ async def register_bee(request: BeeRegistrationRequest) -> Dict[str, Any]:
     }
 
     _bees_registry[request.bee_id] = bee_data
+
+    # Auto-register capabilities in semantic router
+    if request.model_capabilities:
+        try:
+            semantic_router.register_bee_capabilities(request.bee_id, request.model_capabilities)
+            logger.info(f"Registered capabilities for {request.bee_id} in semantic router")
+        except Exception as e:
+            logger.warning(f"Failed to register capabilities in semantic router: {e}")
+
     return {"success": True, "bee_id": request.bee_id, "message": f"Bee {request.bee_id} registered successfully"}
 
 
