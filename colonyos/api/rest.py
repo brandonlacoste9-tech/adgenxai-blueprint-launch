@@ -17,8 +17,12 @@ from pydantic import BaseModel, Field
 from colonyos.core.types import Identity
 from colonyos.core.types import Task as ColonyTask
 from colonyos.core.types import TaskStatus, WorkerCapability
+from colonyos.api.routes import bees, telemetry
 
 logger = logging.getLogger(__name__)
+
+# In-memory external task storage (for bee submissions like KOLONI Studio)
+_external_tasks_db: Dict[str, Dict[str, Any]] = {}
 
 
 class TaskCreateRequest(BaseModel):
@@ -128,6 +132,9 @@ class ColonyAPI:
             allow_headers=["*"],
         )
         self.active_connections: List[WebSocket] = []
+        # Mount external bee routers (bees, telemetry)
+        self.app.include_router(bees.router)
+        self.app.include_router(telemetry.router)
         self._setup_routes()
 
     def _setup_routes(self) -> None:
@@ -138,6 +145,101 @@ class ColonyAPI:
                 "timestamp": datetime.now(timezone.utc).isoformat(),
                 "version": "0.1.0",
             }
+
+        # ======================== EXTERNAL TASK MANAGEMENT (for bees like KOLONI) ========================
+
+        @self.app.post("/api/v1/tasks", status_code=status.HTTP_201_CREATED)
+        async def submit_external_task(
+            task_type: str = Field(..., min_length=1, max_length=255),
+            description: str = Field(..., min_length=1, max_length=2000),
+            payload: Dict[str, Any] = Field(default_factory=dict),
+            callback_url: Optional[str] = None,
+            bee_id: Optional[str] = None,
+        ) -> Dict[str, Any]:
+            """Submit task from external bee (e.g., KOLONI Studio)."""
+            task_id = uuid4().hex
+            now = datetime.now(timezone.utc).isoformat()
+
+            _external_tasks_db[task_id] = {
+                "task_id": task_id,
+                "task_type": task_type,
+                "description": description,
+                "payload": payload,
+                "callback_url": callback_url,
+                "bee_id": bee_id,
+                "status": "pending",
+                "submitted_at": now,
+                "completed_at": None,
+                "result": None,
+                "error": None,
+            }
+
+            logger.info(f"External task submitted: {task_id} from bee: {bee_id}")
+
+            return {
+                "task_id": task_id,
+                "status": "pending",
+                "message": f"Task {task_id} submitted successfully",
+            }
+
+        @self.app.get("/api/v1/tasks/{task_id}/status")
+        async def get_external_task_status(task_id: str) -> Dict[str, Any]:
+            """Get external task status."""
+            if task_id not in _external_tasks_db:
+                raise HTTPException(status_code=404, detail=f"Task {task_id} not found")
+
+            return _external_tasks_db[task_id]
+
+        @self.app.post("/api/v1/tasks/{task_id}/status")
+        async def update_external_task_status(
+            task_id: str,
+            status: str = Field(..., regex="^(success|failed)$"),
+            result: Optional[Dict[str, Any]] = None,
+            error: Optional[str] = None,
+        ) -> Dict[str, Any]:
+            """Update task status from bee."""
+            if task_id not in _external_tasks_db:
+                raise HTTPException(status_code=404, detail=f"Task {task_id} not found")
+
+            now = datetime.now(timezone.utc).isoformat()
+            task = _external_tasks_db[task_id]
+            task["status"] = "completed" if status == "success" else "failed"
+            task["completed_at"] = now
+            task["result"] = result
+            task["error"] = error
+
+            logger.info(f"Task {task_id} completed with status: {status}")
+
+            return {
+                "success": True,
+                "task_id": task_id,
+                "message": f"Task {task_id} status updated",
+            }
+
+        @self.app.get("/api/v1/tasks")
+        async def list_external_tasks(
+            status: Optional[str] = None,
+            bee_id: Optional[str] = None,
+            limit: int = 100,
+        ) -> Dict[str, Any]:
+            """List all external tasks."""
+            tasks = list(_external_tasks_db.values())
+
+            if status:
+                tasks = [t for t in tasks if t["status"] == status]
+
+            if bee_id:
+                tasks = [t for t in tasks if t["bee_id"] == bee_id]
+
+            tasks = tasks[-limit:]
+
+            return {
+                "tasks": tasks,
+                "count": len(tasks),
+                "total": len(_external_tasks_db),
+            }
+
+        # ======================== INTERNAL TASK MANAGEMENT ========================
 
         @self.app.post("/tasks", response_model=TaskResponse, status_code=status.HTTP_201_CREATED)
         async def create_task(request: TaskCreateRequest, identity: Identity = Depends(get_current_identity)):
