@@ -47,11 +47,12 @@ const CreatorStudio = () => {
         title: "Success!",
         description: `${format === "longcat" ? "LongCat" : "Emu"} content generated`,
       });
-    } catch (error: any) {
+    } catch (error) {
       console.error("Generation error:", error);
+      const message = error instanceof Error ? error.message : "Failed to generate content";
       toast({
         title: "Generation Failed",
-        description: error.message || "Failed to generate content",
+        description: message,
         variant: "destructive",
       });
     } finally {
@@ -86,11 +87,12 @@ const CreatorStudio = () => {
         title: "Success!",
         description: `Content formatted for ${platform}`,
       });
-    } catch (error: any) {
+    } catch (error) {
       console.error("Export error:", error);
+      const message = error instanceof Error ? error.message : "Failed to export content";
       toast({
         title: "Export Failed",
-        description: error.message || "Failed to export content",
+        description: message,
         variant: "destructive",
       });
     } finally {
