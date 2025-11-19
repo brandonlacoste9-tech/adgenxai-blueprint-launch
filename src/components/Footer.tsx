@@ -71,10 +71,15 @@ const Footer = () => {
           <p className="text-background/80 text-sm">
             Contact: <a href={BRAND_IDENTITY.contactHref} className="underline hover:text-background">{BRAND_IDENTITY.contactEmail}</a>
           </p>
-          <div className="flex gap-6 text-sm">
-            <a href="#" className="text-background/80 hover:text-background transition-colors">Privacy Policy</a>
-            <a href="#" className="text-background/80 hover:text-background transition-colors">Terms of Service</a>
-            <a href="#" className="text-background/80 hover:text-background transition-colors">Cookie Policy</a>
+          <div className="flex items-center gap-3 text-sm text-background/80">
+            <span className="inline-flex items-center gap-2 rounded-full border border-white/15 px-3 py-1 bg-white/5 backdrop-blur-sm mono text-[11px] uppercase tracking-[0.2em]">
+              Made with love · Codex
+            </span>
+            <div className="flex gap-4">
+              <a href="#" className="hover:text-background transition-colors">Privacy</a>
+              <a href="#" className="hover:text-background transition-colors">Terms</a>
+              <a href="#" className="hover:text-background transition-colors">Cookies</a>
+            </div>
           </div>
         </div>
       </div>
