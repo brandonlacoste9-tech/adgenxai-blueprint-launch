@@ -5,6 +5,21 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+// Input validation schema
+const validateMessages = (messages: any): boolean => {
+  if (!Array.isArray(messages)) return false;
+  if (messages.length === 0 || messages.length > 50) return false;
+  
+  return messages.every(msg => 
+    msg && 
+    typeof msg === 'object' &&
+    typeof msg.role === 'string' &&
+    typeof msg.content === 'string' &&
+    msg.content.length <= 10000 &&
+    ['user', 'assistant', 'system'].includes(msg.role)
+  );
+};
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -12,13 +27,30 @@ serve(async (req) => {
 
   try {
     const { messages } = await req.json();
+    
+    // Validate input
+    if (!validateMessages(messages)) {
+      return new Response(
+        JSON.stringify({ error: "Invalid request format. Please check your input and try again." }), 
+        {
+          status: 400,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
+    }
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     
     if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
+      return new Response(
+        JSON.stringify({ error: "Service temporarily unavailable. Please try again later." }), 
+        {
+          status: 503,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
     }
 
-    console.log("Calling Lovable AI with messages:", messages);
+    console.log("Processing chat request with", messages.length, "messages");
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -40,12 +72,11 @@ serve(async (req) => {
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Lovable AI error:", response.status, errorText);
+      console.error("AI API request failed with status:", response.status);
       
       if (response.status === 429) {
         return new Response(
-          JSON.stringify({ error: "Rate limit exceeded. Please try again later." }), 
+          JSON.stringify({ error: "Too many requests. Please try again in a moment." }), 
           {
             status: 429,
             headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -55,7 +86,7 @@ serve(async (req) => {
       
       if (response.status === 402) {
         return new Response(
-          JSON.stringify({ error: "Payment required. Please add credits to your workspace." }), 
+          JSON.stringify({ error: "Service quota exceeded. Please contact support." }), 
           {
             status: 402,
             headers: { ...corsHeaders, "Content-Type": "application/json" },
@@ -63,16 +94,22 @@ serve(async (req) => {
         );
       }
       
-      throw new Error(`AI gateway error: ${response.status}`);
+      return new Response(
+        JSON.stringify({ error: "Unable to process your request. Please try again." }), 
+        {
+          status: 500,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        }
+      );
     }
 
     return new Response(response.body, {
       headers: { ...corsHeaders, "Content-Type": "text/event-stream" },
     });
   } catch (error) {
-    console.error("Chat error:", error);
+    console.error("Request processing error:", error instanceof Error ? error.constructor.name : "Unknown");
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }), 
+      JSON.stringify({ error: "Unable to process your request. Please try again." }), 
       {
         status: 500,
         headers: { ...corsHeaders, "Content-Type": "application/json" },

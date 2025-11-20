@@ -5,6 +5,8 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const ALLOWED_PLATFORMS = ['instagram', 'youtube', 'tiktok', 'twitter', 'facebook'];
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -13,9 +15,27 @@ serve(async (req) => {
   try {
     const { content, platform } = await req.json();
     
+    // Input validation
+    if (!content || typeof content !== 'string' || content.length === 0 || content.length > 10000) {
+      return new Response(
+        JSON.stringify({ error: "Invalid content. Please provide text between 1 and 10000 characters." }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    
+    if (!platform || !ALLOWED_PLATFORMS.includes(platform.toLowerCase())) {
+      return new Response(
+        JSON.stringify({ error: "Invalid platform. Please select a valid social media platform." }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
+      return new Response(
+        JSON.stringify({ error: "Service temporarily unavailable. Please try again later." }),
+        { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const platformPrompts = {
@@ -63,7 +83,7 @@ serve(async (req) => {
     const systemPrompt = platformPrompts[platform as keyof typeof platformPrompts] || 
       "Format this content for social media posting.";
 
-    console.log(`Formatting content for ${platform}`);
+    console.log(`Formatting content for ${platform}, length:`, content.length);
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -82,30 +102,36 @@ serve(async (req) => {
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Lovable AI error:", response.status, errorText);
+      console.error("AI API request failed with status:", response.status);
       
       if (response.status === 429) {
         return new Response(
-          JSON.stringify({ error: "Rate limit exceeded. Please try again later." }),
+          JSON.stringify({ error: "Too many requests. Please try again in a moment." }),
           { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
       if (response.status === 402) {
         return new Response(
-          JSON.stringify({ error: "Payment required. Please add credits to your workspace." }),
+          JSON.stringify({ error: "Service quota exceeded. Please contact support." }),
           { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
       
-      throw new Error(`AI gateway error: ${response.status}`);
+      return new Response(
+        JSON.stringify({ error: "Unable to format content. Please try again." }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const data = await response.json();
     const formattedContent = data.choices?.[0]?.message?.content;
 
     if (!formattedContent) {
-      throw new Error("No formatted content generated");
+      console.error("Empty content received from AI API");
+      return new Response(
+        JSON.stringify({ error: "Unable to format content. Please try again." }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     console.log(`Content formatted successfully for ${platform}`);
@@ -115,9 +141,9 @@ serve(async (req) => {
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
-    console.error("Error in export-social:", error);
+    console.error("Request processing error:", error instanceof Error ? error.constructor.name : "Unknown");
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      JSON.stringify({ error: "Unable to format content. Please try again." }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
