@@ -111,6 +111,7 @@
     filter: blur(100px);
     mix-blend-mode: screen;
     animation: aurora-drift 30s infinite alternate;
+    pointer-events: none;
   }
 
   .aurora-blob-1 {
