@@ -1,7 +1,12 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 
-const CTA = () => {
+type CTAProps = {
+  onStartFree: () => void;
+  onScheduleDemo: () => void;
+};
+
+const CTA = ({ onStartFree, onScheduleDemo }: CTAProps) => {
   return (
     <section className="py-24 relative">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -17,6 +22,7 @@ const CTA = () => {
             <Button 
               size="lg" 
               className="text-lg px-8 py-6 bg-primary hover:bg-primary-dark transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl group"
+              onClick={onStartFree}
             >
               Start Free Trial
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
@@ -25,6 +31,7 @@ const CTA = () => {
               size="lg" 
               variant="outline" 
               className="text-lg px-8 py-6 border-2 hover:bg-secondary transition-all duration-300"
+              onClick={onScheduleDemo}
             >
               Schedule a Demo
             </Button>
