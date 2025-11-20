@@ -5,7 +5,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
-import { supabase } from "@/integrations/supabase/client";
+import { supabase, isSupabaseConfigured } from "@/integrations/supabase/client";
 import { Loader2, Copy, Instagram, Youtube, MessageCircle } from "lucide-react";
 import { BRAND_IDENTITY } from "@/lib/constants";
 
@@ -19,6 +19,13 @@ const CreatorStudio = () => {
   const [exportedContent, setExportedContent] = useState("");
   const { toast } = useToast();
 
+  const ensureSupabase = () => {
+    if (!isSupabaseConfigured || !supabase) {
+      throw new Error("Supabase is not configured. Add VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY in Vercel env.");
+    }
+    return supabase;
+  };
+
   const handleGenerate = async (format: "longcat" | "emu") => {
     if (!prompt.trim()) {
       toast({
@@ -29,10 +36,20 @@ const CreatorStudio = () => {
       return;
     }
 
+    if (!isSupabaseConfigured) {
+      toast({
+        title: "Supabase not configured",
+        description: "Add the Supabase env vars to generate content.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsGenerating(true);
     try {
+      const client = ensureSupabase();
       const functionName = format === "longcat" ? "generate-longcat" : "generate-emu";
-      const { data, error } = await supabase.functions.invoke(functionName, {
+      const { data, error } = await client.functions.invoke(functionName, {
         body: { prompt, style, tone },
       });
 
@@ -70,9 +87,19 @@ const CreatorStudio = () => {
       return;
     }
 
+    if (!isSupabaseConfigured) {
+      toast({
+        title: "Supabase not configured",
+        description: "Add the Supabase env vars to export content.",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setIsExporting(true);
     try {
-      const { data, error } = await supabase.functions.invoke("export-social", {
+      const client = ensureSupabase();
+      const { data, error } = await client.functions.invoke("export-social", {
         body: { content: generatedContent, platform },
       });
 
@@ -118,6 +145,14 @@ const CreatorStudio = () => {
           AI-powered content creation for every platform {BRAND_IDENTITY.emoji}
         </p>
       </div>
+
+      {!isSupabaseConfigured && (
+        <div className="mb-6 rounded-lg border border-amber-300/40 bg-amber-500/10 px-4 py-3 text-amber-100 glass-card">
+          Supabase is not configured. Add <code className="font-mono">VITE_SUPABASE_URL</code> and{" "}
+          <code className="font-mono">VITE_SUPABASE_PUBLISHABLE_KEY</code> in the Vercel project env vars to enable
+          generation and export.
+        </div>
+      )}
 
       <Tabs defaultValue="generate" className="space-y-6">
         <TabsList className="grid w-full grid-cols-2 glass-card">
