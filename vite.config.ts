@@ -15,4 +15,13 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    outDir: "dist",
+    assetsDir: "assets",
+    emptyOutDir: true,
+  },
+  preview: {
+    host: "0.0.0.0",
+    port: 4173,
+  },
 }));

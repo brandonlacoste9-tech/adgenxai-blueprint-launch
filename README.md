@@ -89,6 +89,23 @@ Preparing Claude (or any design agent) to render the OrbitalProp Neurosphere? Us
 4) `npm run build` (verified locally)
 5) Publish/share in Lovable or push to trigger CI.
 
+### Vercel hydration checklist
+
+- The included `vercel.json` uses `@vercel/static-build` and rewrites every route to `index.html` so the Vite bundle hydrates on every path (no static HTML fallbacks).
+- Before pushing, run `npm run build && npm run preview -- --host 0.0.0.0 --port 4173` to mimic the production artifact and confirm click handlers still fire against the built output.
+- After deploying, verify the production HTML references hashed assets under `/assets/` (no `/src/main.tsx` in network logs) and that the CSP header mirrors the in-page meta tag.
+
+## Analytics and CSP
+
+- Set `VITE_GA_MEASUREMENT_ID` in your deployment environment (Vercel project settings) to enable the official Google Analytics `gtag.js` loader. When present, the app will automatically inject the external tag and configure page tracking.
+- The bundled `vercel.json` and the root `index.html` add a CSP that permits Google Analytics while keeping other sources restricted. If you override headers elsewhere, include at least:
+  - `script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com` (and mirror the same allowlist on `script-src-elem`)
+  - `connect-src 'self' https://www.google-analytics.com`
+  - `img-src 'self' data: https://www.google-analytics.com`
+  - `frame-src 'self' https://www.googletagmanager.com`
+
+This keeps analytics working without weakening the baseline CSP.
+
 ## Notes
 
 - `.env` is not tracked; use `.env.example` as a template.
