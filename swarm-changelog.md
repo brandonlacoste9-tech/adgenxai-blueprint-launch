@@ -3,6 +3,10 @@
 ## 2025-11-21
 - Mirrored the Google Analytics-friendly CSP in both Vercel headers and the root HTML meta tag so deployments stay consistent, preventing blocked analytics scripts.
 
+## 2025-11-22
+- Locked Vercel to the static-build pipeline with SPA rewrites so the Vite bundle hydrates on every route (no static HTML stalling click handlers).
+- Documented the hydration verification ritual (preview the built artifact and confirm hashed assets) to keep production interactivity observable.
+
 ## 2025-11-20
 - Added Google Analytics bootstrapper (via `initAnalytics`) gated on `VITE_GA_MEASUREMENT_ID` so page tracking only runs when configured.
 - Shipped Vercel CSP headers that whitelist the official Google tags while keeping other sources locked down.
