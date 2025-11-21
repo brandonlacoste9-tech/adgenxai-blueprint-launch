@@ -5,6 +5,9 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
+const ALLOWED_STYLES = ['creative', 'professional', 'casual', 'formal', 'playful'];
+const ALLOWED_TONES = ['professional', 'friendly', 'formal', 'casual', 'enthusiastic'];
+
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -13,9 +16,34 @@ serve(async (req) => {
   try {
     const { prompt, style, tone } = await req.json();
     
+    // Input validation
+    if (!prompt || typeof prompt !== 'string' || prompt.length === 0 || prompt.length > 5000) {
+      return new Response(
+        JSON.stringify({ error: "Invalid prompt. Please provide text between 1 and 5000 characters." }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    
+    if (style && !ALLOWED_STYLES.includes(style)) {
+      return new Response(
+        JSON.stringify({ error: "Invalid style option. Please select a valid style." }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    
+    if (tone && !ALLOWED_TONES.includes(tone)) {
+      return new Response(
+        JSON.stringify({ error: "Invalid tone option. Please select a valid tone." }),
+        { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
+    }
+    
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
-      throw new Error("LOVABLE_API_KEY is not configured");
+      return new Response(
+        JSON.stringify({ error: "Service temporarily unavailable. Please try again later." }),
+        { status: 503, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const systemPrompt = `You are a creative content writer for Kolony, specializing in Emu format - quick, impactful content for rapid consumption.
@@ -31,7 +59,7 @@ Create punchy, memorable content that delivers maximum impact in minimum words. 
 
 Keep it concise, powerful, and shareable. Think tweet threads or Instagram captions.`;
 
-    console.log("Generating Emu content with prompt:", prompt);
+    console.log("Generating Emu content, length:", prompt.length);
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -50,30 +78,36 @@ Keep it concise, powerful, and shareable. Think tweet threads or Instagram capti
     });
 
     if (!response.ok) {
-      const errorText = await response.text();
-      console.error("Lovable AI error:", response.status, errorText);
+      console.error("AI API request failed with status:", response.status);
       
       if (response.status === 429) {
         return new Response(
-          JSON.stringify({ error: "Rate limit exceeded. Please try again later." }),
+          JSON.stringify({ error: "Too many requests. Please try again in a moment." }),
           { status: 429, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
       if (response.status === 402) {
         return new Response(
-          JSON.stringify({ error: "Payment required. Please add credits to your workspace." }),
+          JSON.stringify({ error: "Service quota exceeded. Please contact support." }),
           { status: 402, headers: { ...corsHeaders, "Content-Type": "application/json" } }
         );
       }
       
-      throw new Error(`AI gateway error: ${response.status}`);
+      return new Response(
+        JSON.stringify({ error: "Unable to generate content. Please try again." }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     const data = await response.json();
     const content = data.choices?.[0]?.message?.content;
 
     if (!content) {
-      throw new Error("No content generated");
+      console.error("Empty content received from AI API");
+      return new Response(
+        JSON.stringify({ error: "Unable to generate content. Please try again." }),
+        { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
+      );
     }
 
     console.log("Emu content generated successfully");
@@ -83,9 +117,9 @@ Keep it concise, powerful, and shareable. Think tweet threads or Instagram capti
       { headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   } catch (error) {
-    console.error("Error in generate-emu:", error);
+    console.error("Request processing error:", error instanceof Error ? error.constructor.name : "Unknown");
     return new Response(
-      JSON.stringify({ error: error instanceof Error ? error.message : "Unknown error" }),
+      JSON.stringify({ error: "Unable to generate content. Please try again." }),
       { status: 500, headers: { ...corsHeaders, "Content-Type": "application/json" } }
     );
   }
