@@ -1,13 +1,13 @@
 project_id = "aodmlnprcsptohpvrmrk"
 
 [functions.chat]
-verify_jwt = false
+verify_jwt = true
 
 [functions.generate-longcat]
-verify_jwt = false
+verify_jwt = true
 
 [functions.generate-emu]
-verify_jwt = false
+verify_jwt = true
 
 [functions.export-social]
-verify_jwt = false
+verify_jwt = true

@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { MessageCircle, X, Send, Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
 
 interface Message {
   role: "user" | "assistant";
@@ -18,6 +19,7 @@ const Chatbot = () => {
   const [isLoading, setIsLoading] = useState(false);
   const scrollViewportRef = useRef<HTMLDivElement>(null);
   const { toast } = useToast();
+  const { user, session } = useAuth();
 
   useEffect(() => {
     const viewport = scrollViewportRef.current;
@@ -31,6 +33,15 @@ const Chatbot = () => {
   }, [messages]);
 
   const streamChat = async (userMessage: string) => {
+    if (!session) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to use the chat feature",
+        variant: "destructive",
+      });
+      return;
+    }
+
     const newMessages = [...messages, { role: "user" as const, content: userMessage }];
     setMessages(newMessages);
     setIsLoading(true);
@@ -42,7 +53,7 @@ const Chatbot = () => {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+            Authorization: `Bearer ${session.access_token}`,
           },
           body: JSON.stringify({ messages: newMessages }),
         }
@@ -101,101 +112,131 @@ const Chatbot = () => {
           }
         }
       }
+
+      if (textBuffer.trim()) {
+        try {
+          const parsed = JSON.parse(textBuffer);
+          const content = parsed.choices?.[0]?.delta?.content;
+          if (content) {
+            assistantMessage += content;
+            setMessages((prev) => {
+              const last = prev[prev.length - 1];
+              if (last?.role === "assistant") {
+                return prev.map((m, i) =>
+                  i === prev.length - 1 ? { ...m, content: assistantMessage } : m
+                );
+              }
+              return [...prev, { role: "assistant", content: assistantMessage }];
+            });
+          }
+        } catch (e) {
+          console.error("Final parse error:", e);
+        }
+      }
     } catch (error) {
       console.error("Chat error:", error);
+      const errorMessage =
+        error instanceof Error ? error.message : "Something went wrong. Please try again.";
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to send message",
+        description: errorMessage,
         variant: "destructive",
       });
+      setMessages((prev) => prev.slice(0, -1));
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const handleSend = () => {
     if (!input.trim() || isLoading) return;
-
-    const userMessage = input.trim();
+    streamChat(input);
     setInput("");
-    await streamChat(userMessage);
+  };
+
+  const handleKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      handleSend();
+    }
   };
 
   return (
     <>
-      {!isOpen && (
-        <Button
-          onClick={() => setIsOpen(true)}
-          size="lg"
-          className="fixed bottom-6 right-6 rounded-full h-14 w-14 shadow-[0_8px_32px_0_rgba(31,38,135,0.3)] hover:shadow-[0_8px_32px_0_rgba(31,38,135,0.5)] backdrop-blur-xl border border-white/20"
-        >
-          <MessageCircle className="h-6 w-6" />
-        </Button>
-      )}
+      <Button
+        onClick={() => setIsOpen(!isOpen)}
+        className="fixed bottom-6 right-6 h-14 w-14 rounded-full shadow-lg hover:scale-110 transition-transform z-50"
+        size="icon"
+        aria-label={isOpen ? "Close chat" : "Open chat"}
+      >
+        {isOpen ? <X className="h-6 w-6" /> : <MessageCircle className="h-6 w-6" />}
+      </Button>
 
       {isOpen && (
-        <Card className="fixed bottom-6 right-6 w-96 h-[32rem] flex flex-col shadow-[0_8px_32px_0_rgba(31,38,135,0.3)] bg-background/40 backdrop-blur-2xl border-white/20">
-          <div className="flex items-center justify-between p-4 border-b border-white/10 bg-white/5 backdrop-blur-xl">
+        <Card className="fixed bottom-24 right-6 w-96 h-[600px] shadow-2xl flex flex-col z-50 animate-in slide-in-from-bottom-4">
+          <div className="p-4 border-b bg-primary text-primary-foreground rounded-t-lg">
             <h3 className="font-semibold">AI Assistant</h3>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => setIsOpen(false)}
-            >
-              <X className="h-4 w-4" />
-            </Button>
+            <p className="text-sm opacity-90">Ask me anything!</p>
           </div>
 
-          <ScrollArea className="flex-1 p-4 bg-background/20" viewportRef={scrollViewportRef}>
-            <div className="space-y-4">
-              {messages.length === 0 && (
-                <div className="text-center text-muted-foreground text-sm py-8">
-                  Hi! How can I help you today?
-                </div>
-              )}
-              {messages.map((message, index) => (
+          <ScrollArea className="flex-1 p-4" ref={scrollViewportRef}>
+            {messages.length === 0 && (
+              <div className="text-center text-muted-foreground py-8">
+                <MessageCircle className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                <p>Start a conversation!</p>
+              </div>
+            )}
+            {messages.map((message, i) => (
+              <div
+                key={i}
+                className={`mb-4 ${
+                  message.role === "user" ? "text-right" : "text-left"
+                }`}
+              >
                 <div
-                  key={index}
-                  className={`flex ${
-                    message.role === "user" ? "justify-end" : "justify-start"
+                  className={`inline-block max-w-[80%] p-3 rounded-lg ${
+                    message.role === "user"
+                      ? "bg-primary text-primary-foreground"
+                      : "bg-muted"
                   }`}
                 >
-                  <div
-                    className={`rounded-lg px-4 py-2 max-w-[80%] backdrop-blur-xl border ${
-                      message.role === "user"
-                        ? "bg-primary/20 text-foreground border-primary/30"
-                        : "bg-white/10 text-foreground border-white/20"
-                    }`}
-                  >
-                    <p className="text-sm whitespace-pre-wrap">{message.content}</p>
-                  </div>
+                  <p className="text-sm whitespace-pre-wrap break-words">{message.content}</p>
                 </div>
-              ))}
-              {isLoading && messages[messages.length - 1]?.role === "user" && (
-                <div className="flex justify-start">
-                  <div className="bg-white/10 backdrop-blur-xl border border-white/20 rounded-lg px-4 py-2">
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                  </div>
+              </div>
+            ))}
+            {isLoading && (
+              <div className="text-left mb-4">
+                <div className="inline-block bg-muted p-3 rounded-lg">
+                  <Loader2 className="h-5 w-5 animate-spin" />
                 </div>
-              )}
-            </div>
+              </div>
+            )}
           </ScrollArea>
 
-          <form onSubmit={handleSubmit} className="p-4 border-t border-white/10 bg-white/5 backdrop-blur-xl">
+          <div className="p-4 border-t">
             <div className="flex gap-2">
               <Input
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
+                onKeyPress={handleKeyPress}
                 placeholder="Type your message..."
-                disabled={isLoading}
-                className="bg-white/10 backdrop-blur-sm border-white/20 text-foreground placeholder:text-muted-foreground"
+                disabled={isLoading || !user}
+                className="flex-1"
               />
-              <Button type="submit" size="icon" disabled={isLoading || !input.trim()}>
+              <Button
+                onClick={handleSend}
+                disabled={isLoading || !input.trim() || !user}
+                size="icon"
+              >
                 <Send className="h-4 w-4" />
               </Button>
             </div>
-          </form>
+            {!user && (
+              <p className="text-xs text-muted-foreground mt-2 text-center">
+                Please sign in to use the chat
+              </p>
+            )}
+          </div>
         </Card>
       )}
     </>

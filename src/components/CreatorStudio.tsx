@@ -8,6 +8,7 @@ import { useToast } from "@/hooks/use-toast";
 import { supabase, isSupabaseConfigured } from "@/integrations/supabase/client";
 import { Loader2, Copy, Instagram, Youtube, MessageCircle } from "lucide-react";
 import { BRAND_IDENTITY } from "@/lib/constants";
+import { useAuth } from "@/hooks/useAuth";
 
 const CreatorStudio = () => {
   const [prompt, setPrompt] = useState("");
@@ -18,6 +19,7 @@ const CreatorStudio = () => {
   const [isExporting, setIsExporting] = useState(false);
   const [exportedContent, setExportedContent] = useState("");
   const { toast } = useToast();
+  const { user, session } = useAuth();
 
   const ensureSupabase = () => {
     if (!isSupabaseConfigured || !supabase) {
@@ -27,6 +29,15 @@ const CreatorStudio = () => {
   };
 
   const handleGenerate = async (format: "longcat" | "emu") => {
+    if (!session) {
+      toast({
+        title: "Authentication required",
+        description: "Please sign in to use the content generator",
+        variant: "destructive",
+      });
+      return;
+    }
+
     if (!prompt.trim()) {
       toast({
         title: "Error",

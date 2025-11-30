@@ -10,6 +10,8 @@ import Footer from "@/components/Footer";
 import Chatbot from "@/components/Chatbot";
 import { BRAND_IDENTITY } from "@/lib/constants";
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { Link } from "react-router-dom";
 import {
   Dialog,
   DialogContent,
@@ -29,6 +31,7 @@ type InterestType = "demo" | "start";
 
 const Index = () => {
   const { toast } = useToast();
+  const { user, signOut } = useAuth();
   const [segment, setSegment] = useState<Segment>("engineers");
   const [interestOpen, setInterestOpen] = useState(false);
   const [interestType, setInterestType] = useState<InterestType>("demo");
@@ -121,12 +124,16 @@ const Index = () => {
             >
               Compare
             </button>
-            <button
-              className="text-sm text-foreground/70 hover:text-foreground transition-colors"
-              onClick={() => toast({ title: "Sign in coming soon" })}
-            >
-              Sign In
-            </button>
+            {user ? (
+              <>
+                <span className="text-sm text-muted-foreground">{user.email}</span>
+                <Button variant="outline" size="sm" onClick={signOut}>Sign Out</Button>
+              </>
+            ) : (
+              <Button variant="outline" size="sm" asChild>
+                <Link to="/auth">Sign In</Link>
+              </Button>
+            )}
             <button
               onClick={() => openInterest("start")}
               className="text-sm font-semibold px-4 py-2 bg-primary hover:bg-primary-dark rounded-lg text-primary-foreground transition-colors"
