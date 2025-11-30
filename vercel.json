@@ -1,23 +1,9 @@
 {
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "dist"
-      }
-    }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ],
   "framework": "vite",
   "installCommand": "npm ci",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
+  "ignoreCommand": "echo \"Using Vite build\"",
   "builds": [
     {
       "src": "package.json",
@@ -46,9 +32,6 @@
   ],
   "headers": [
     {
-  "ignoreCommand": "echo \"Using Vite build\"",
-  "headers": [
-    {
       "source": "/assets/(.*)",
       "headers": [
         {
@@ -62,7 +45,6 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' https://www.googletagmanager.com https://www.google-analytics.com; script-src-elem 'self' https://www.googletagmanager.com https://www.google-analytics.com; script-src-attr 'none'; connect-src 'self' https://www.google-analytics.com; img-src 'self' data: https://www.google-analytics.com; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src 'self' https://www.googletagmanager.com; object-src 'none'; base-uri 'self'"
           "value": "default-src 'self'; script-src 'self' https://adgenxai-blueprint-launch.vercel.app 'unsafe-inline' 'unsafe-eval' https://www.googletagmanager.com https://www.google-analytics.com; connect-src 'self' https://*.supabase.co wss://*.supabase.co https://www.google-analytics.com; img-src 'self' data: https: blob:; style-src 'self' 'unsafe-inline'; font-src 'self' data:; frame-src 'self' https://www.googletagmanager.com; object-src 'none'; base-uri 'self'"
         }
       ]
