@@ -19,6 +19,16 @@ export default defineConfig(({ mode }) => ({
     outDir: "dist",
     assetsDir: "assets",
     emptyOutDir: true,
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'supabase-vendor': ['@supabase/supabase-js'],
+          'ui-vendor': ['lucide-react', 'sonner'],
+        },
+      },
+    },
+    chunkSizeWarningLimit: 1000,
   },
   preview: {
     host: "0.0.0.0",
