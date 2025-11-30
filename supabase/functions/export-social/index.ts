@@ -1,4 +1,6 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { checkRateLimit, trackUsage, checkQuota } from '../_shared/rate-limit.ts';
 
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
@@ -13,6 +15,56 @@ serve(async (req) => {
   }
 
   try {
+    // Get authorization header
+    const authHeader = req.headers.get('Authorization');
+    if (!authHeader) {
+      return new Response(
+        JSON.stringify({ error: 'Authentication required' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Initialize Supabase client
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      { global: { headers: { Authorization: authHeader } } }
+    );
+
+    // Get authenticated user
+    const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+    if (authError || !user) {
+      return new Response(
+        JSON.stringify({ error: 'Invalid authentication' }),
+        { status: 401, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
+    // Check rate limit
+    const rateCheck = checkRateLimit(user.id, 10, 60000);
+    if (!rateCheck.allowed) {
+      return new Response(
+        JSON.stringify({ error: 'Rate limit exceeded. Please try again later.' }),
+        { 
+          status: 429, 
+          headers: { 
+            ...corsHeaders, 
+            'Content-Type': 'application/json',
+            'Retry-After': rateCheck.retryAfter?.toString() || '60'
+          } 
+        }
+      );
+    }
+
+    // Check daily quota
+    const hasQuota = await checkQuota(supabaseClient, user.id, 100);
+    if (!hasQuota) {
+      return new Response(
+        JSON.stringify({ error: 'Daily usage limit reached. Please try again tomorrow.' }),
+        { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+      );
+    }
+
     const { content, platform } = await req.json();
     
     // Input validation
@@ -83,7 +135,7 @@ serve(async (req) => {
     const systemPrompt = platformPrompts[platform as keyof typeof platformPrompts] || 
       "Format this content for social media posting.";
 
-    console.log(`Formatting content for ${platform}, length:`, content.length);
+    console.log(`Formatting content for ${platform}, user:`, user.id);
 
     const response = await fetch("https://ai.gateway.lovable.dev/v1/chat/completions", {
       method: "POST",
@@ -135,6 +187,11 @@ serve(async (req) => {
     }
 
     console.log(`Content formatted successfully for ${platform}`);
+
+    // Track usage (non-blocking)
+    trackUsage(supabaseClient, user.id, 'export-social', 1).catch(err => 
+      console.error('Usage tracking error:', err)
+    );
 
     return new Response(
       JSON.stringify({ formattedContent, platform }),
