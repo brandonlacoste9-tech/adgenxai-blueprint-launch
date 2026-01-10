@@ -14,6 +14,7 @@ const CreatorStudio = () => {
   const [prompt, setPrompt] = useState("");
   const [style, setStyle] = useState("creative");
   const [tone, setTone] = useState("professional");
+    const [language, setLanguage] = useState("en");
   const [generatedContent, setGeneratedContent] = useState("");
   const [isGenerating, setIsGenerating] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
@@ -61,7 +62,7 @@ const CreatorStudio = () => {
       const client = ensureSupabase();
       const functionName = format === "longcat" ? "generate-longcat" : "generate-emu";
       const { data, error } = await client.functions.invoke(functionName, {
-        body: { prompt, style, tone },
+        body: { prompt, style, tone, language },
       });
 
       if (error) throw error;
@@ -181,8 +182,7 @@ const CreatorStudio = () => {
                 className="min-h-32 bg-background/40 backdrop-blur-xl border-white/10"
               />
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">                <div>
                   <label className="text-sm font-medium mb-2 block">Style</label>
                   <Select value={style} onValueChange={setStyle}>
                     <SelectTrigger className="bg-background/40 backdrop-blur-xl border-white/10">
@@ -205,6 +205,21 @@ const CreatorStudio = () => {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent>
+                                      </Select>
+              </div>
+
+              <div>
+                <label className="text-sm font-medium mb-2 block">Language</label>
+                <Select value={language} onValueChange={setLanguage}>
+                  <SelectTrigger className="bg-background/40 backdrop-blur-xl border-white/10">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="en">English</SelectItem>
+                    <SelectItem value="fr">Français (Québec)</SelectItem>
+                  </SelectContent>
+                                  </Select>
+              </div>
                       <SelectItem value="professional">Professional</SelectItem>
                       <SelectItem value="friendly">Friendly</SelectItem>
                       <SelectItem value="energetic">Energetic</SelectItem>
