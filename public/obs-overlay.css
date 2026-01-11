@@ -1,0 +1,290 @@
+/* ADGENXAI MISSION CONTROL OBS OVERLAY */
+/* Transparent overlay for broadcast-quality presentation */
+/* Use with OBS Browser Source pointing to /mission-control */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
+
+/* ==================================================
+   TRANSPARENT BACKGROUND FOR BROADCAST
+   ================================================== */
+
+body {
+  background: transparent !important;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* ==================================================
+   GLASSMORPHISM ENHANCEMENT FOR CAMERA
+   ================================================== */
+
+.glass-panel,
+.glass-card,
+.bg-white\/5 {
+  background: rgba(10, 10, 10, 0.85) !important;
+  backdrop-filter: blur(20px) !important;
+  -webkit-backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(212, 175, 55, 0.2) !important;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+/* ==================================================
+   MODERN VOYAGEUR COLOR SCHEME
+   ================================================== */
+
+:root {
+  --cognac: #3d2b1f;
+  --voyageur-gold: #d4af37;
+  --smoked-glass: rgba(255, 255, 255, 0.05);
+  --text-primary: #ffffff;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+}
+
+/* ==================================================
+   ENHANCED VISIBILITY FOR CAMERA
+   ================================================== */
+
+.metric-card,
+.card,
+.MetricCard {
+  background: rgba(10, 10, 10, 0.9) !important;
+  border: 2px solid rgba(212, 175, 55, 0.4) !important;
+  border-radius: 12px !important;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    0 0 20px rgba(212, 175, 55, 0.1) !important;
+}
+
+.metric-card:hover,
+.card:hover {
+  border-color: var(--voyageur-gold) !important;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    0 0 30px rgba(212, 175, 55, 0.2) !important;
+}
+
+/* ==================================================
+   TEXT ENHANCEMENT FOR BROADCAST
+   ================================================== */
+
+h1, h2, h3, h4, h5, h6 {
+  color: var(--voyageur-gold) !important;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5) !important;
+  font-weight: 600 !important;
+}
+
+.text-white,
+.text-foreground {
+  color: var(--text-primary) !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7) !important;
+}
+
+.text-stone-300,
+.text-muted-foreground {
+  color: var(--text-secondary) !important;
+}
+
+/* ==================================================
+   LIVE ELEMENTS HIGHLIGHTING
+   ================================================== */
+
+.live-indicator,
+.animate-pulse {
+  box-shadow: 0 0 10px var(--voyageur-gold) !important;
+}
+
+.thought-log-item {
+  animation: slideInRight 0.5s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+/* ==================================================
+   COST METRICS EMPHASIS
+   ================================================== */
+
+.cost-metric,
+.savings-display {
+  color: #10b981 !important; /* Green for savings */
+  font-weight: 700 !important;
+  text-shadow: 0 0 8px rgba(16, 185, 129, 0.3) !important;
+  animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+  from {
+    text-shadow: 0 0 8px rgba(16, 185, 129, 0.3);
+  }
+  to {
+    text-shadow: 0 0 16px rgba(16, 185, 129, 0.6);
+  }
+}
+
+/* ==================================================
+   AGENT STATUS INDICATORS
+   ================================================== */
+
+.agent-status-active {
+  position: relative;
+}
+
+.agent-status-active::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(45deg, transparent, rgba(212, 175, 55, 0.1), transparent);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* ==================================================
+   BROADCAST-SAFE ANIMATIONS
+   ================================================== */
+
+.framer-motion-safe * {
+  animation-duration: 0.3s !important;
+  animation-timing-function: ease-out !important;
+}
+
+/* Reduce motion for broadcast stability */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==================================================
+   RESPONSIVE SCALING FOR DIFFERENT STREAM RESOLUTIONS
+   ================================================== */
+
+@media (max-width: 1920px) {
+  .metric-card h3 {
+    font-size: 2.5rem !important;
+  }
+}
+
+@media (max-width: 1440px) {
+  .metric-card h3 {
+    font-size: 2rem !important;
+  }
+}
+
+@media (max-width: 1080px) {
+  .metric-card h3 {
+    font-size: 1.75rem !important;
+  }
+
+  body {
+    font-size: 14px !important;
+  }
+}
+
+/* ==================================================
+   HIGH CONTRAST MODE FOR ACCESSIBILITY
+   ================================================== */
+
+@media (prefers-contrast: high) {
+  .glass-panel,
+  .glass-card {
+    background: rgba(0, 0, 0, 0.95) !important;
+    border: 2px solid var(--voyageur-gold) !important;
+  }
+
+  .text-stone-300,
+  .text-muted-foreground {
+    color: #ffffff !important;
+  }
+}
+
+/* ==================================================
+   LOGO AND BRANDING OVERLAY
+   ================================================== */
+
+.broadcast-watermark {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  opacity: 0.7;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.broadcast-watermark img {
+  height: 40px;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.5));
+}
+
+/* ==================================================
+   EMERGENCY BROADCAST MODE
+   ================================================== */
+
+.broadcast-emergency-mode {
+  background: rgba(220, 38, 38, 0.9) !important;
+  border: 3px solid #dc2626 !important;
+  animation: emergency-flash 1s infinite alternate;
+}
+
+@keyframes emergency-flash {
+  0% { border-color: #dc2626; }
+  100% { border-color: #ffffff; }
+}
+
+/* ==================================================
+   SUCCESS HIGHLIGHTING
+   ================================================== */
+
+.broadcast-success {
+  background: rgba(16, 185, 129, 0.1) !important;
+  border: 2px solid #10b981 !important;
+  animation: success-pulse 2s ease-in-out infinite;
+}
+
+@keyframes success-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+  }
+  50% {
+    box-shadow: 0 0 0 10px rgba(16, 185, 129, 0);
+  }
+}
+
+/* ==================================================
+   DEBUG MODE (REMOVE FOR PRODUCTION)
+   ================================================== */
+
+.debug-mode .glass-panel {
+  outline: 1px solid red;
+}
+
+.debug-mode .metric-card::before {
+  content: attr(class);
+  position: absolute;
+  top: -20px;
+  left: 0;
+  background: red;
+  color: white;
+  font-size: 10px;
+  padding: 2px 4px;
+  border-radius: 2px;
+}

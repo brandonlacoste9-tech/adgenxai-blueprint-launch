@@ -1,0 +1,309 @@
+/* =====================================================
+   ADGENXAI MISSION CONTROL - OBS CINEMATIC OVERLAY
+   Transforms the dashboard into sci-fi UI for broadcast
+   ===================================================== */
+
+/* OBS HOLOGRAPHIC OVERLAY CSS - IRON MAN PROTOCOL */
+
+/* 1. Make the background invisible so your camera feed shows through */
+body, html {
+  background-color: transparent !important;
+  background-image: none !important;
+  overflow: hidden !important; /* No scrollbars on HUD */
+}
+
+/* 2. Turn the "Mission Control" panels into floating glass */
+.glass-panel, .metric-card {
+  background: rgba(5, 5, 5, 0.45) !important; /* Highly transparent black */
+  border: 1px solid rgba(212, 175, 55, 0.3) !important; /* Gold rims */
+  backdrop-filter: blur(4px) !important; /* Subtle blur behind text */
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.1) !important; /* Gold glow */
+  border-radius: 16px !important;
+}
+
+/* 3. Make text "pop" against your video feed (High Contrast) */
+h1, h2, h3, p, span {
+  text-shadow: 0 2px 4px rgba(0,0,0,0.9) !important; /* Heavy drop shadow for readability */
+}
+
+/* 4. The "Live Pulse" animations - Make them brighter */
+.animate-pulse {
+  animation-duration: 1.5s;
+  filter: drop-shadow(0 0 8px #00ff00);
+}
+
+/* 5. Hide the background "Grain" texture (it interferes with video) */
+.grain-overlay {
+  display: none !important;
+}
+
+/* BASE CINEMATIC SETUP */
+body {
+  background: transparent !important;
+  font-family: 'Courier New', monospace !important;
+  color: #d4af37 !important;
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5);
+}
+
+/* GLASSMORPHISM ENHANCEMENT FOR BROADCAST */
+.glass-card, .bg-white\/5 {
+  background: rgba(10, 10, 10, 0.85) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid rgba(212, 175, 55, 0.3) !important;
+  box-shadow:
+    0 0 20px rgba(212, 175, 55, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+/* METRIC CARDS - CINEMATIC ENHANCEMENT */
+.bg-\[\\#120c08\] {
+  background: rgba(18, 12, 8, 0.9) !important;
+  border: 1px solid rgba(212, 175, 55, 0.4) !important;
+  box-shadow:
+    0 0 15px rgba(212, 175, 55, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05) !important;
+}
+
+/* HEADER ENHANCEMENT */
+header {
+  background: linear-gradient(135deg,
+    rgba(10, 10, 10, 0.95) 0%,
+    rgba(18, 12, 8, 0.95) 50%,
+    rgba(10, 10, 10, 0.95) 100%) !important;
+  border-bottom: 1px solid rgba(212, 175, 55, 0.5) !important;
+  box-shadow: 0 0 20px rgba(212, 175, 55, 0.1) !important;
+}
+
+/* LOG STREAM CINEMATIC EFFECTS */
+.bg-\[\\#1c1410\] {
+  background: rgba(28, 20, 16, 0.9) !important;
+  border: 1px solid rgba(212, 175, 55, 0.3) !important;
+  position: relative !important;
+}
+
+.bg-\[\\#1c1410\]::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    #d4af37 20%,
+    #d4af37 80%,
+    transparent 100%) !important;
+  animation: scanline 3s linear infinite !important;
+}
+
+@keyframes scanline {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
+
+/* THOUGHT VECTOR ENTRIES */
+.p-4.border-l-2 {
+  border-left: 2px solid #d4af37 !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+  backdrop-filter: blur(10px) !important;
+  transition: all 0.3s ease !important;
+}
+
+.p-4.border-l-2:hover {
+  background: rgba(212, 175, 55, 0.05) !important;
+  box-shadow: 0 0 10px rgba(212, 175, 55, 0.2) !important;
+  transform: translateX(5px) !important;
+}
+
+/* LIVE PULSE EFFECTS */
+.animate-pulse {
+  animation: cinematic-pulse 2s ease-in-out infinite !important;
+}
+
+@keyframes cinematic-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+/* STATUS INDICATORS */
+.h-2.w-2.bg-green-500 {
+  box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00 !important;
+  animation: status-glow 2s ease-in-out infinite alternate !important;
+}
+
+@keyframes status-glow {
+  from { box-shadow: 0 0 5px #00ff00, 0 0 10px #00ff00; }
+  to { box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00, 0 0 30px #00ff00; }
+}
+
+/* BUTTON ENHANCEMENTS */
+button {
+  transition: all 0.3s ease !important;
+}
+
+button:hover {
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.3) !important;
+  transform: translateY(-1px) !important;
+}
+
+/* SCROLLBAR STYLING */
+::-webkit-scrollbar {
+  width: 6px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(10, 10, 10, 0.5) !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(212, 175, 55, 0.5) !important;
+  border-radius: 3px !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(212, 175, 55, 0.8) !important;
+}
+
+/* TEXT GLOW EFFECTS */
+.text-\[\#d4af37\] {
+  text-shadow: 0 0 10px rgba(212, 175, 55, 0.5) !important;
+}
+
+/* GRADIENT TEXT */
+.text-4xl.font-light.tracking-widest {
+  background: linear-gradient(135deg, #d4af37 0%, #ffd700 50%, #d4af37 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  filter: drop-shadow(0 0 10px rgba(212, 175, 55, 0.3)) !important;
+}
+
+/* HOLOGRAPHIC EFFECT FOR ACTIVE ELEMENTS */
+.active-element {
+  position: relative !important;
+}
+
+.active-element::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  right: -2px;
+  bottom: -2px;
+  background: linear-gradient(45deg,
+    transparent,
+    rgba(212, 175, 55, 0.1),
+    transparent,
+    rgba(212, 175, 55, 0.1),
+    transparent) !important;
+  border-radius: inherit !important;
+  animation: holographic 3s linear infinite !important;
+  pointer-events: none !important;
+}
+
+@keyframes holographic {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* SYSTEM STATUS VISUALIZER ENHANCEMENT */
+.w-32.h-32.rounded-full.border {
+  background: radial-gradient(circle,
+    rgba(212, 175, 55, 0.1) 0%,
+    rgba(212, 175, 55, 0.05) 50%,
+    transparent 100%) !important;
+  box-shadow:
+    0 0 20px rgba(212, 175, 55, 0.2),
+    inset 0 0 20px rgba(212, 175, 55, 0.1) !important;
+}
+
+/* LOG ENTRY ANIMATIONS */
+@keyframes slideInFromLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.p-4.border-l-2 {
+  animation: slideInFromLeft 0.5s ease-out !important;
+}
+
+/* CRITICAL SYSTEM ALERTS */
+.critical-alert {
+  animation: critical-flash 1s ease-in-out infinite alternate !important;
+}
+
+@keyframes critical-flash {
+  from { border-color: #d4af37; }
+  to { border-color: #ff4444; box-shadow: 0 0 20px rgba(255, 68, 68, 0.5); }
+}
+
+/* SUCCESS METRICS HIGHLIGHT */
+.success-metric {
+  position: relative !important;
+}
+
+.success-metric::before {
+  content: '▲';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  color: #00ff00;
+  font-size: 12px;
+  animation: metric-sparkle 2s ease-in-out infinite !important;
+}
+
+@keyframes metric-sparkle {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.7; transform: scale(1.2); }
+}
+
+/* BROADCAST-SAFE TYPOGRAPHY */
+* {
+  font-synthesis: none !important;
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* RESPONSIVE BROADCAST SCALING */
+@media (max-width: 1920px) {
+  .text-4xl { font-size: 2.5rem !important; }
+  .text-3xl { font-size: 2rem !important; }
+  .text-2xl { font-size: 1.75rem !important; }
+}
+
+/* LOW-LIGHT BROADCAST MODE */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --broadcast-contrast: 1.2;
+  }
+
+  * {
+    filter: contrast(var(--broadcast-contrast)) !important;
+  }
+}
+
+/* ACCESSIBILITY FOR BROADCAST */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/*
+USAGE INSTRUCTIONS:
+1. In OBS, add a "Browser Source"
+2. Set URL to: http://localhost:3000/mission-control
+3. Set width/height to match your broadcast resolution
+4. Add this CSS file to OBS via "Custom CSS" field
+5. Position the browser source as an overlay on your camera feed
+
+This creates a holographic, sci-fi UI that floats in 3D space beside you during the presentation.
+*/

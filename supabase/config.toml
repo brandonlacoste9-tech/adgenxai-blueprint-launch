@@ -1,4 +1,4 @@
-project_id = "aodmlnprcsptohpvrmrk"
+project_id = "tpsseyzezbmfxydeaibr"
 
 [functions.chat]
 verify_jwt = true
@@ -10,4 +10,10 @@ verify_jwt = true
 verify_jwt = true
 
 [functions.export-social]
+verify_jwt = true
+
+[functions.generate-vertex-ai]
+verify_jwt = true
+
+[functions.adgen-orchestrator]
 verify_jwt = true

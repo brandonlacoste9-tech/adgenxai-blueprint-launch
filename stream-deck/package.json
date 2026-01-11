@@ -1,0 +1,34 @@
+{
+  "name": "adgenxai-stream-deck-bridge",
+  "version": "1.0.0",
+  "description": "Physical hardware control bridge for AdgenXAI agent orchestration",
+  "main": "stream-deck-bridge.js",
+  "scripts": {
+    "start": "node stream-deck-bridge.js",
+    "dev": "nodemon stream-deck-bridge.js",
+    "test": "echo \"Press buttons on your Stream Deck to test\" && node stream-deck-bridge.js"
+  },
+  "dependencies": {
+    "elgato-stream-deck": "^6.2.0",
+    "axios": "^1.6.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.0"
+  },
+  "keywords": [
+    "stream-deck",
+    "hardware-integration",
+    "ai-orchestration",
+    "adgenxai",
+    "physical-computing"
+  ],
+  "author": "AdgenXAI",
+  "license": "MIT",
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-repo/adgenxai-stream-deck"
+  }
+}

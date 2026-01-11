@@ -1,0 +1,10 @@
+---
+description: Standards for Vertex AI & Supabase Edge Function Integration
+globs: ["supabase/functions/**", "**/lib/ai/**"]
+alwaysApply: false
+---
+# Vertex AI Implementation Rules
+- **Model:** Default to `gemini-2.0-flash` for streaming speed.
+- **Safety:** Always wrap Vertex AI calls in a `try-catch` with specific error logging.
+- **Optimization:** Use `thinkingBudget: 0` for standard Studio tasks to save Supabase Edge Function memory unless complex reasoning is requested.
+- **Deno Compliance:** Use `npm:` specifiers for imports (e.g., `npm:@google-cloud/vertexai`).

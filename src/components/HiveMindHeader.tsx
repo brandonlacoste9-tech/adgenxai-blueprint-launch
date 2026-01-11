@@ -1,11 +1,44 @@
-import { useState } from "react";
-import { Menu, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Menu, X, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { NavLink } from "@/components/NavLink";
 import { BRAND_IDENTITY } from "@/lib/constants";
 
+interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }>;
+}
+
 const HiveMindHeader = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isInstallable, setIsInstallable] = useState(false);
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+
+  useEffect(() => {
+    const handler = (e: Event) => {
+      e.preventDefault();
+      setDeferredPrompt(e as BeforeInstallPromptEvent);
+      setIsInstallable(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handler);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handler);
+    };
+  }, []);
+
+  const handleInstall = async () => {
+    if (!deferredPrompt) return;
+
+    deferredPrompt.prompt();
+    const { outcome } = await deferredPrompt.userChoice;
+
+    if (outcome === 'accepted') {
+      setIsInstallable(false);
+      setDeferredPrompt(null);
+    }
+  };
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/40 border-b border-white/10 shadow-[0_2px_8px_rgba(0,0,0,0.4)]">
@@ -42,17 +75,41 @@ const HiveMindHeader = () => {
             >
               Contact
             </a>
+            {isInstallable && (
+              <Button
+                variant="ghost"
+                className="text-yellow-400 hover:text-white"
+                onClick={handleInstall}
+                title="Install AdGen XAI Atelier"
+              >
+                <Download className="w-4 h-4 mr-2" />
+                <span className="text-[10px] uppercase tracking-widest">Install App</span>
+              </Button>
+            )}
           </nav>
 
-          {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="md:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
-          </Button>
+          {/* Install Button (Mobile) & Menu Button */}
+          <div className="flex items-center gap-2">
+            {isInstallable && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="md:hidden text-yellow-400 hover:text-white"
+                onClick={handleInstall}
+                title="Install AdGen XAI Atelier"
+              >
+                <Download className="w-4 h-4" />
+              </Button>
+            )}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+            </Button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
@@ -86,6 +143,19 @@ const HiveMindHeader = () => {
             >
               Contact
             </a>
+            {isInstallable && (
+              <Button
+                variant="ghost"
+                className="w-full justify-start text-yellow-400 hover:text-white"
+                onClick={() => {
+                  handleInstall();
+                  setMobileMenuOpen(false);
+                }}
+              >
+                <Download className="w-4 h-4 mr-2" />
+                <span className="text-xs uppercase tracking-widest">Install App</span>
+              </Button>
+            )}
           </nav>
         )}
       </div>

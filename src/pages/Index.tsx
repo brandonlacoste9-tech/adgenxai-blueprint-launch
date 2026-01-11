@@ -8,6 +8,7 @@ import Stats from "@/components/Stats";
 import CTA from "@/components/CTA";
 import Footer from "@/components/Footer";
 import Chatbot from "@/components/Chatbot";
+import GoogleOneTap from "@/components/GoogleOneTap";
 import { BRAND_IDENTITY } from "@/lib/constants";
 import { useToast } from "@/hooks/use-toast";
 import { useAuth } from "@/hooks/useAuth";
@@ -32,6 +33,18 @@ type InterestType = "demo" | "start";
 const Index = () => {
   const { toast } = useToast();
   const { user, signOut } = useAuth();
+
+  const handleOneTapSuccess = () => {
+    toast({
+      title: "Welcome to Modern Voyageur!",
+      description: "You've been signed in with Google One Tap.",
+    });
+  };
+
+  const handleOneTapError = (error: any) => {
+    console.error('One Tap error:', error);
+    // Fallback to regular auth flow
+  };
   const [segment, setSegment] = useState<Segment>("engineers");
   const [interestOpen, setInterestOpen] = useState(false);
   const [interestType, setInterestType] = useState<InterestType>("demo");
@@ -104,6 +117,11 @@ const Index = () => {
 
   return (
     <main className="min-h-screen">
+      {/* Google One Tap - Zero friction authentication */}
+      <GoogleOneTap
+        onAuthSuccess={handleOneTapSuccess}
+        onAuthError={handleOneTapError}
+      />
       {/* Navigation Bar */}
       <nav className="sticky top-0 z-50 glass-nav">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">

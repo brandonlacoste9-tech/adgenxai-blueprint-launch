@@ -14,6 +14,10 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+        serif: ['Playfair Display', 'serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -47,6 +51,25 @@ export default {
         pink: "hsl(var(--pink))",
         orange: "hsl(var(--orange))",
         amber: "hsl(var(--amber))",
+        // Modern Voyageur Brand Colors
+        cognac: {
+          50: '#f8f6f4',
+          100: '#e8e2db',
+          200: '#d4c4b4',
+          300: '#bba288',
+          400: '#a38769',
+          500: '#8c6e4f',
+          600: '#70563e',
+          700: '#5a4632',
+          800: '#4a3a2a',
+          900: '#3d2b1f',  // Primary Leather
+          DEFAULT: '#3d2b1f',
+        },
+        voyageur: {
+          gold: '#d4af37',  // Brushed Gold
+          leather: '#3d2b1f', // Deep Cognac Leather
+          glass: 'rgba(255, 255, 255, 0.05)', // Smoked Glass
+        },
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",

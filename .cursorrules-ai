@@ -1,0 +1,102 @@
+---
+description: Standards for Vertex AI & Supabase Edge Function Integration
+globs: ["supabase/functions/**", "**/lib/ai/**"]
+alwaysApply: false
+---
+# Vertex AI Implementation Rules
+- **Model:** Default to `gemini-2.0-flash` for streaming speed.
+- **Safety:** Always wrap Vertex AI calls in a `try-catch` with specific error logging.
+- **Optimization:** Use `thinkingBudget: 0` for standard Studio tasks to save Supabase Edge Function memory unless complex reasoning is requested.
+- **Deno Compliance:** Use `npm:` specifiers for imports (e.g., `npm:@google-cloud/vertexai`).
+
+## 🤖 Vertex AI Integration Standards
+
+### Model Selection Guidelines
+- **Primary Model:** `gemini-2.0-flash-exp` for fastest streaming responses
+- **Fallback Model:** `gemini-1.5-flash` for reliability
+- **Heavy Reasoning:** `gemini-1.5-pro` only when complex analysis required
+- **Cost Optimization:** Always use the most efficient model for the task
+
+### Safety & Error Handling
+- **Always try-catch:** Every Vertex AI call must be wrapped in try-catch
+- **Specific logging:** Log errors with context (user ID, prompt length, model used)
+- **Graceful degradation:** Fall back to simpler models if advanced model fails
+- **User feedback:** Provide meaningful error messages to users
+
+### Performance Optimization
+- **Memory management:** Use `thinkingBudget: 0` for standard creative tasks
+- **Streaming first:** Prefer streaming responses over batch generation
+- **Rate limiting:** Respect Supabase Edge Function limits (20 req/min default)
+- **Caching:** Cache common responses when appropriate
+
+### Deno Environment Compliance
+- **Import specifiers:** Use `npm:@google-cloud/vertexai` format for Deno compatibility
+- **ESM modules:** Ensure all dependencies support ESM in Deno runtime
+- **Edge runtime:** Optimize for Vercel/Supabase Edge Function constraints
+- **Bundle size:** Minimize dependencies to stay under function limits
+
+## 🔧 Supabase Edge Function Architecture
+
+### Function Structure
+- **Single responsibility:** Each function handles one AI operation type
+- **Authentication:** Always verify Supabase JWT tokens
+- **Validation:** Input validation with clear error messages
+- **Response format:** Consistent JSON structure for all responses
+
+### Streaming Implementation
+- **Server-Sent Events:** Use SSE format for real-time responses
+- **Chunk processing:** Handle partial responses appropriately
+- **Connection management:** Proper cleanup and error handling
+- **Progress indication:** Send progress updates during generation
+
+### Security Best Practices
+- **API key protection:** Never expose Google Cloud credentials
+- **User isolation:** Ensure multi-tenant data separation
+- **Rate limiting:** Implement per-user rate limits
+- **Audit logging:** Track all AI usage for billing/analytics
+
+## 📊 Usage Tracking & Analytics
+
+### Metrics Collection
+- **Request counting:** Track total requests per user
+- **Token usage:** Monitor input/output token consumption
+- **Response times:** Measure generation latency
+- **Error rates:** Track failure rates by model/type
+
+### Cost Optimization
+- **Model selection:** Route to cheapest viable model
+- **Caching strategy:** Cache common prompts/responses
+- **Batch processing:** Group similar requests when possible
+- **Quota management:** Monitor and enforce usage limits
+
+## 🧪 Testing Standards
+
+### Unit Testing
+- **Mock responses:** Test with mock Vertex AI responses
+- **Error scenarios:** Test all error paths
+- **Rate limiting:** Verify rate limit enforcement
+- **Authentication:** Test auth failure scenarios
+
+### Integration Testing
+- **End-to-end:** Test complete AI generation flows
+- **Performance:** Benchmark response times and throughput
+- **Load testing:** Verify scaling under concurrent requests
+- **Edge cases:** Test with extreme inputs and edge cases
+
+## 🚀 Deployment Guidelines
+
+### Environment Setup
+- **Secrets management:** Secure storage of Google Cloud credentials
+- **Environment variables:** Consistent naming across environments
+- **Configuration:** Environment-specific settings (dev/staging/prod)
+- **Monitoring:** Enable logging and alerting
+
+### Rollout Strategy
+- **Gradual deployment:** Roll out new models/features gradually
+- **Fallback support:** Maintain backward compatibility
+- **Monitoring:** Real-time monitoring during rollout
+- **Rollback plan:** Ability to quickly revert changes
+
+---
+
+**Remember:** These rules ensure reliable, cost-effective, and performant AI integration that scales with your Modern Voyageur Studio growth.

@@ -1,0 +1,123 @@
+---
+description: Enforces the Modern Voyageur "Leather & Gold" Luxury Brand Identity
+globs: ["**/*.tsx", "**/*.css", "**/studio/**"]
+alwaysApply: true
+---
+# Modern Voyageur Design System
+- **Visual Palette:** Deep Cognac Leather (#3d2b1f), Brushed Gold (#d4af37), and Smoked Glass.
+- **UI Patterns:** Use Glassmorphism for cards. Apply `backdrop-blur-md` and `border-gold-500/20`.
+- **Typography:** Use Serif headers for a "Heritage" feel and clean Sans-serif for data.
+- **Tone:** Professional, elite, and Canadian-centric (use Canadian English: 'colour', 'centre').
+
+## 🎨 Brand Guidelines
+
+### Colour Palette
+- **Primary Leather:** `#3d2b1f` (Deep Cognac Leather)
+- **Accent Gold:** `#d4af37` (Brushed Gold)
+- **Glass Effects:** `rgba(255, 255, 255, 0.05)` with `backdrop-blur-md`
+- **Text:** `#ffffff` on dark backgrounds, `#1a1a1a` on light backgrounds### Typography Hierarchy
+- **Headers (H1-H3):** Playfair Display or similar serif font for heritage feel
+- **Body Text:** Inter or clean sans-serif for readability
+- **Accent Text:** Brushed Gold for highlights and CTAs
+- **Data/Metrics:** Monospace font for technical information
+
+### Component Patterns
+- **Cards:** Glassmorphism with `bg-white/5 backdrop-blur-md border border-white/10`
+- **Buttons:** Gold gradient `bg-gradient-to-r from-yellow-600 to-yellow-500`
+- **Inputs:** Dark backgrounds with gold focus states
+- **Navigation:** Leather-textured sidebar with gold active states
+
+### Canadian Localization
+- **Spelling:** Always use Canadian English (colour, centre, favour, honour)
+- **Cultural References:** Include Canadian landmarks, symbols, or cultural touchpoints
+- **Date Formats:** YYYY-MM-DD or DD/MM/YYYY (avoid US format)
+- **Currency:** CAD with proper formatting
+- **Legal:** Reference Canadian laws and regulations where applicable
+
+### Voice & Tone
+- **Professional:** Enterprise-grade reliability and sophistication
+- **Elite:** Premium positioning with luxury connotations
+- **Canadian:** Friendly, community-focused, environmentally conscious
+- **Authentic:** Genuine Canadian heritage and values
+- **Inclusive:** Welcoming to all Canadians regardless of background
+
+## 🔧 Implementation Rules
+
+### React Components
+- Use TypeScript interfaces for all props
+- Implement proper error boundaries
+- Follow accessibility guidelines (WCAG 2.1 AA)
+- Use semantic HTML elements
+- Apply consistent className patterns
+
+### CSS/Styling
+- Prefer Tailwind CSS utilities over custom CSS
+- Use CSS custom properties for brand colours
+- Implement responsive design patterns
+- Optimize for performance (minimize repaints)
+- Use CSS Grid and Flexbox for layouts
+
+### Code Quality
+- Write self-documenting code with clear variable names
+- Add JSDoc comments for complex functions
+- Implement proper error handling
+- Use TypeScript strict mode
+- Follow React best practices
+
+### File Organization
+- Group related components in feature folders
+- Use index.ts files for clean imports
+- Separate business logic from UI components
+- Keep utility functions in dedicated lib folders
+- Maintain consistent file naming conventions
+
+## 🚀 Performance Guidelines
+
+### Optimization
+- Implement lazy loading for route components
+- Use React.memo for expensive components
+- Optimize images and assets
+- Implement proper caching strategies
+- Minimize bundle size
+
+### User Experience
+- Provide loading states for async operations
+- Implement proper error messages
+- Use progressive enhancement
+- Ensure mobile-first responsive design
+- Test across different browsers and devices
+
+## 📱 Responsive Design
+
+### Breakpoints
+- Mobile: 320px - 768px
+- Tablet: 768px - 1024px
+- Desktop: 1024px+
+- Large Desktop: 1440px+
+
+### Layout Patterns
+- Mobile-first approach
+- Flexible grid systems
+- Touch-friendly interface elements
+- Readable typography scaling
+- Optimized images for different screen sizes
+
+## ♿ Accessibility
+
+### Standards Compliance
+- WCAG 2.1 AA compliance
+- Keyboard navigation support
+- Screen reader compatibility
+- High contrast mode support
+- Reduced motion preferences
+
+### Implementation
+- Semantic HTML structure
+- ARIA labels where needed
+- Focus management
+- Colour contrast ratios
+- Alternative text for images
+
+---
+
+**Remember:** Every design decision should reinforce the Modern Voyageur luxury brand identity. The combination of deep cognac leather, brushed gold accents, and sophisticated Canadian heritage creates a uniquely premium experience that stands apart from generic AI tools.
