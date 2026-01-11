@@ -66,7 +66,7 @@ serve(async (req) => {
       );
     }
 
-    const { prompt, style, tone } = await req.json();
+    const { prompt, style, tone, language } = await req.json();
     
     // Input validation
     if (!prompt || typeof prompt !== 'string' || prompt.length === 0 || prompt.length > 5000) {
@@ -89,6 +89,10 @@ serve(async (req) => {
         { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
+
+    // Validate language parameter
+    const validLanguages = ['en', 'fr'];
+    const targetLanguage = language && validLanguages.includes(language) ? language : 'en';
     
     const LOVABLE_API_KEY = Deno.env.get("LOVABLE_API_KEY");
     if (!LOVABLE_API_KEY) {
@@ -98,7 +102,14 @@ serve(async (req) => {
       );
     }
 
+    // Build language-specific instructions
+    const languageInstructions = targetLanguage === 'fr' 
+      ? `IMPORTANT: Generate all content in Quebec French (Français québécois). Use Quebec French spelling, expressions, and cultural references. Ensure the tone and style are appropriate for Quebec French-speaking audiences.`
+      : `IMPORTANT: Generate all content in English.`;
+
     const systemPrompt = `You are a creative content writer for Kolony, specializing in Emu format - quick, impactful content for rapid consumption.
+
+${languageInstructions}
 
 Style: ${style || 'Creative'}
 Tone: ${tone || 'Professional'}
