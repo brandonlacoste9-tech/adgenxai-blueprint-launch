@@ -9,6 +9,7 @@ import { AuthProvider } from "@/hooks/useAuth";
 const Index = lazy(() => import("./pages/Index"));
 const HiveMind = lazy(() => import("./pages/HiveMind"));
 const Creator = lazy(() => import("./pages/Creator"));
+const LandingPages = lazy(() => import("./pages/LandingPages"));
 const Auth = lazy(() => import("./pages/Auth"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
@@ -35,6 +36,7 @@ const App = () => (
                 <Route path="/" element={<Index />} />
                 <Route path="/hivemind" element={<HiveMind />} />
                 <Route path="/creator" element={<Creator />} />
+                <Route path="/landing-pages" element={<LandingPages />} />
                 <Route path="/auth" element={<Auth />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
