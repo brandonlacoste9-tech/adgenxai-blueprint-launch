@@ -11,7 +11,6 @@ const HiveMind = lazy(() => import("./pages/HiveMind"));
 const Creator = lazy(() => import("./pages/Creator"));
 const LandingPages = lazy(() => import("./pages/LandingPages"));
 const Auth = lazy(() => import("./pages/Auth"));
-const LandingPages = lazy(() => import("./pages/LandingPages"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
