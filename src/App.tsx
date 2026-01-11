@@ -11,6 +11,7 @@ const HiveMind = lazy(() => import("./pages/HiveMind"));
 const Creator = lazy(() => import("./pages/Creator"));
 const LandingPages = lazy(() => import("./pages/LandingPages"));
 const Auth = lazy(() => import("./pages/Auth"));
+const LandingPages = lazy(() => import("./pages/LandingPages"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 
 const queryClient = new QueryClient();
@@ -38,6 +39,7 @@ const App = () => (
                 <Route path="/creator" element={<Creator />} />
                 <Route path="/landing-pages" element={<LandingPages />} />
                 <Route path="/auth" element={<Auth />} />
+                <Route path="/landing-pages" element={<LandingPages />} />
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
