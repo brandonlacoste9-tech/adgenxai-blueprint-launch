@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles, Terminal, Zap } from "lucide-react";
 import { BRAND_IDENTITY } from "@/lib/constants";
+import { Link } from "react-router-dom";
 
 type HeroProps = {
   activeSegment: "marketers" | "engineers" | "enterprise";
@@ -100,31 +101,55 @@ const Hero = ({
           </div>
 
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16">
-            <Button 
-              size="lg" 
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
+            <Button
+              size="lg"
               className="text-base px-8 py-6 bg-gradient-to-r from-primary to-amber hover:from-primary-dark hover:to-primary transition-all duration-300 transform hover:scale-105 shadow-2xl shadow-primary/40 hover:shadow-primary/60 group rounded-xl"
               onClick={onRequestDemo}
             >
               Request Demo
               <ArrowRight className="ml-2 w-5 h-5 group-hover:translate-x-1 transition-transform" />
             </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
+            <Button
+              size="lg"
+              variant="outline"
               className="text-base px-8 py-6 glass-card hover:glass-strong transition-all duration-300 transform hover:scale-105 rounded-xl border-none"
               onClick={onStartFree}
             >
               Start Free
             </Button>
-            <Button 
-              size="lg" 
-              variant="outline" 
+            <Button
+              size="lg"
+              variant="outline"
               className="text-base px-8 py-6 glass-card hover:glass-strong transition-all duration-300 transform hover:scale-105 rounded-xl border-none"
               onClick={onViewArchitecture}
             >
               🛰 View Architecture
             </Button>
+          </div>
+
+          {/* Iron Man Protocol Access */}
+          <div className="flex flex-col sm:flex-row gap-3 justify-center items-center mb-16">
+            <Link to="/studio">
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-sm px-6 py-4 glass-card hover:glass-strong transition-all duration-300 transform hover:scale-105 rounded-xl border-amber-500/30 hover:border-amber-500/50 group"
+              >
+                <Terminal className="mr-2 w-4 h-4 text-amber-400 group-hover:scale-110 transition-transform" />
+                🚀 Launch Studio
+              </Button>
+            </Link>
+            <Link to="/mission-control">
+              <Button
+                size="lg"
+                variant="outline"
+                className="text-sm px-6 py-4 glass-card hover:glass-strong transition-all duration-300 transform hover:scale-105 rounded-xl border-gold-500/30 hover:border-gold-500/50 group"
+              >
+                <Zap className="mr-2 w-4 h-4 text-gold-400 group-hover:scale-110 transition-transform" />
+                🎛️ Mission Control
+              </Button>
+            </Link>
           </div>
 
           {/* Metrics */}
