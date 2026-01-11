@@ -6,7 +6,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { lazy, Suspense } from "react";
 import { AuthProvider } from "@/hooks/useAuth";
 
-const Index = lazy(() => import("./pages/Index"));
+const Index = lazy(() => import("./app/page"));
 const HiveMind = lazy(() => import("./pages/HiveMind"));
 const Creator = lazy(() => import("./pages/Creator"));
 const LandingPages = lazy(() => import("./pages/LandingPages"));
